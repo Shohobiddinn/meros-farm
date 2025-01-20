@@ -5,7 +5,7 @@
         <img src="/src/assets/Group 7.svg" alt="Categories">
       </div>
     </router-link>
-    <router-link to="/mainPage" class="footer-item" active-class="active">
+    <router-link to="/statistic" class="footer-item" active-class="active">
       <div class="img-wrapper">
         <img src="/src/assets/statistic.png" alt="Categories">
       </div>

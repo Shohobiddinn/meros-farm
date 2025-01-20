@@ -76,6 +76,14 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue')
     },
     {
+      path:'/statistic',
+      name:'statistic',
+      component: () => import('../views/Statictic.vue'),
+      meta:{
+        requiresAuth: true,
+      }
+    },
+    {
       path: "/:pathMatch(.*)*",
       redirect: "/mainPage"
     }
