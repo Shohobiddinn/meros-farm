@@ -1,0 +1,37 @@
+{
+    "products": [
+      {
+        "name": "L-Вивава амп.1мг/5мл№5 Левокарнитин",
+        "expiry": "01.11.2026",
+        "manufacturer": "Dr.Sertus/Турция",
+        "price_old": "107 982",
+        "price_new": "111 982",
+        "badge": false
+      },
+      {
+        "name": "L-тироксин 100 №50",
+        "expiry": "01.10.2025",
+        "manufacturer": "Берлин Хеми/Германия",
+        "price_old": "25 976",
+        "price_new": "26 779",
+        "badge": true
+      },
+      {
+        "name": "L-тироксин 50 №50",
+        "expiry": "01.08.2025",
+        "manufacturer": "Берлин Хеми/Германия",
+        "price_old": "20 952",
+        "price_new": "21 600",
+        "badge": false
+      },
+      {
+        "name": "L-Цет таб5.5мг№100",
+        "expiry": "01.08.2026",
+        "manufacturer": "Kusum Healthcare Pvt.Ltd/Индия",
+        "price_old": "189 771",
+        "price_new": "195 640",
+        "badge": true
+      }
+    ]
+  }
+  

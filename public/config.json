@@ -1,0 +1,10 @@
+{
+    "dev":{
+
+        "basePath":"https://merospharmfergana.uz"
+    },
+    "prod":{
+
+        "basePath":"https://merospharmfergana.uz"
+    }
+}
