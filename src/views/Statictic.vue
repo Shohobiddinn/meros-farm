@@ -6,15 +6,20 @@ import { AllApi } from '@/core/api';
 import { ref } from 'vue';
 const search = ref(null);
 const Orders = ref([]);
+const status = ref(null);
+
 async function getAllOrders(page = 1) {
+    console.log(status.value);
+
     let all = await AllApi.OrderSectionApi.getOrdersOrderGet({
+        page: page,
+        limit: 25,
         search: search.value,
-        status: null,
+        status: status.value,
         companyName: null,
         branchId: null,
         id: null,
-        page: page,
-        limit: 25
+
     });
     const { data } = all;
     if (data) {
@@ -30,28 +35,40 @@ const excelTable = ref(null);
 function downloadExcel(item) {
     excelTable.value = item;
     setTimeout(() => {
-
         const table = document.getElementById(`downloadTable`);
         const workbook = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
         XLSX.writeFile(workbook, `test.xlsx`);
-    })
+    }, 500)
 }
 </script>
 
 <template>
+    <div class="container" style="text-align: center;">
+        <div class="search-container">
+            <i class="search-icon">🔍</i>
+            <select class="search-box" v-model="status" @change="getAllOrders">
+                <option :value="null" selected>Barchasi</option>
+                <option value="true">Bron urilgan</option>
+                <option value="false">Bron urilmagan</option>
+            </select>
+        </div>
+
+    </div>
+
     <div class="container" style="background-color: #F6FBFC; overflow-y: auto; height: 80vh;">
         <div v-for="(item, index) in Orders?.data" :key="index">
             <div>
                 <div style="display: flex; justify-content: space-between;">
                     <span style="font-weight: 600;">Buyurtma № {{ item.id }}</span>
-                    <span > {{ item.payment_type == 'NASIYA' ? '25%' : '100%' }} </span>
-                    <span v-if="item.status == 1" style="display: flex; align-items: center;font-weight: 600;"
-                        @click="downloadExcel(item)"><img src="../assets/excell.svg" width="18" height="15"
-                            alt=""> Yuklab
+                    <span> {{ item.payment_type == 'NASIYA' ? '25%' : '100%' }} </span>
+                    <span v-if="item.status == 1"
+                        style="display: flex; align-items: center;font-weight: 600;cursor: pointer;"
+                        @click="downloadExcel(item)"><img src="../assets/excell.svg" width="18" height="15" alt="">
+                        Yuklab
                         olish</span>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
-                    <span >Dorilar soni {{ item.number }} ta</span>
+                    <span>Dorilar soni {{ item.number }} ta</span>
                     <span v-if="item.status == 1">Chiqmagan dorilar soni {{ item.trade.filter((fill) =>
                         fill.trade_status == false).length }}
                         ta</span>
@@ -83,31 +100,37 @@ function downloadExcel(item) {
                 </div>
             </div>
         </div>
-        <div v-if="excelTable">
-            <table id="downloadTable" v-show="false" >
+        <div v-if="excelTable" id="downloadTable">
+            <table v-show="false">
                 <thead>
                     <tr>
-                        <th>ID</th>
+                        <th>№</th>
                         <th>Dori nomi</th>
                         <th>Soni</th>
                         <th>Seriya raqami</th>
                         <th>Muddati</th>
                         <th>Firma</th>
                         <th>Narxi</th>
+                        <th>Jami summa</th>
                         <th>To'lov turi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="(item, index) in excelTable.trade" :key="index">
+                    <tr v-for="(item, index) in excelTable.trade" :key="index"
+                        :style="{ background: item.trade_status === null ? 'transparent' : item.trade_status === false ? '#FF0000' : '#00FF00' }">
                         <td>{{ item?.id }}</td>
-                        <td style="background-color: #ff0000;">{{ item?.sold_product?.name }}</td>
+                        <td>{{ item?.sold_product?.name }}</td>
                         <td>{{ item?.number }}</td>
-                        <td>{{ item?.sold_product?.code }}</td>
+                        <td>{{ `${item?.sold_product?.code}` }}</td>
                         <td>{{ item?.sold_product?.deadline }}</td>
                         <td>{{ item?.sold_product?.company_name }}</td>
-                        <td>{{ item?.sold_product?.price100 }} so'm</td>
-                        <td>{{ excelTable.payment_type }}</td>
+                        <td>{{ excelTable.payment_type == 'NASIYA' ? item.sold_product.price25 :
+                            item?.sold_product?.price100 }} so'm</td>
+                        <td>{{ excelTable.payment_type == 'NASIYA' ? item.sold_product.price25 * item?.number :
+                            item?.sold_product?.price100 * item?.number }} so'm</td>
+                        <td>{{ excelTable.payment_type == 'NASIYA' ? '25%' : '100%' }}</td>
                     </tr>
+
                 </tbody>
             </table>
 
@@ -152,5 +175,30 @@ function downloadExcel(item) {
     /* Белый цвет текста */
     border-color: #0fcbc0;
     /* Цвет границы совпадает с фоном */
+}
+
+.search-container {
+  display: flex;
+  align-items: center;
+  border: 1px solid #69c2c0;
+  border-radius: 10px;
+  padding: 5px 10px;
+  background-color: #fff;
+  width: 95%;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.search-icon {
+  margin-right: 10px;
+  color: #8c8c8c;
+  font-size: 16px;
+}
+
+.search-box {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 16px;
+  color: #8c8c8c;
 }
 </style>
