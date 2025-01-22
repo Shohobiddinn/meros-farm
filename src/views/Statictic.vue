@@ -1,7 +1,7 @@
 <script setup>
 import Footer from '@/components/Footer.vue';
 import paginate from 'vuejs-paginate-next';
-
+import * as XLSX from "xlsx";
 import { AllApi } from '@/core/api';
 import { ref } from 'vue';
 const search = ref(null);
@@ -25,6 +25,17 @@ async function getAllOrders(page = 1) {
     return [];
 }
 getAllOrders();
+const excelTable = ref(null);
+
+function downloadExcel(item) {
+    excelTable.value = item;
+    setTimeout(() => {
+
+        const table = document.getElementById(`downloadTable`);
+        const workbook = XLSX.utils.table_to_book(table, { sheet: "Sheet1" });
+        XLSX.writeFile(workbook, `test.xlsx`);
+    })
+}
 </script>
 
 <template>
@@ -32,13 +43,15 @@ getAllOrders();
         <div v-for="(item, index) in Orders?.data" :key="index">
             <div>
                 <div style="display: flex; justify-content: space-between;">
-                    <span>Buyurtma № {{ item.number }}</span>
-                    <span> {{ item.payment_type == 'NASIYA' ? '25%' : '100%' }} </span>
-                    <span v-if="item.status == 1" style="display: flex; align-items: center;"><img
-                            src="../assets/excell.svg" width="18" height="15" alt=""> Yuklab olish</span>
+                    <span style="font-weight: 600;">Buyurtma № {{ item.id }}</span>
+                    <span > {{ item.payment_type == 'NASIYA' ? '25%' : '100%' }} </span>
+                    <span v-if="item.status == 1" style="display: flex; align-items: center;font-weight: 600;"
+                        @click="downloadExcel(item)"><img src="../assets/excell.svg" width="18" height="15"
+                            alt=""> Yuklab
+                        olish</span>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
-                    <span>Dorilar soni {{ item.number }} ta</span>
+                    <span >Dorilar soni {{ item.number }} ta</span>
                     <span v-if="item.status == 1">Chiqmagan dorilar soni {{ item.trade.filter((fill) =>
                         fill.trade_status == false).length }}
                         ta</span>
@@ -52,7 +65,7 @@ getAllOrders();
             </div>
             <div style="background-color: #fff; border-radius: 7px; padding: 0 10px; margin: 15px 0;"
                 v-for="trade in item.trade">
-                <h4 style="text-align: center;">
+                <h4 style="text-align: center; font-weight: 600;">
                     {{ trade.sold_product.name }}
                 </h4>
                 <div style="display: flex; justify-content: space-between;">
@@ -65,9 +78,39 @@ getAllOrders();
                 </div>
                 <div style="display: flex; justify-content: space-between;">
                     <span>Miqdori: {{ trade.number }} ta</span><span>Jami summa: {{ item.payment_type == 'NASIYA' ?
-                        trade.sold_product.price25 * trade.number : trade.sold_product.price100 * trade.number }} so’m</span>
+                        trade.sold_product.price25 * trade.number : trade.sold_product.price100 * trade.number }}
+                        so’m</span>
                 </div>
             </div>
+        </div>
+        <div v-if="excelTable">
+            <table id="downloadTable" v-show="false" >
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Dori nomi</th>
+                        <th>Soni</th>
+                        <th>Seriya raqami</th>
+                        <th>Muddati</th>
+                        <th>Firma</th>
+                        <th>Narxi</th>
+                        <th>To'lov turi</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(item, index) in excelTable.trade" :key="index">
+                        <td>{{ item?.id }}</td>
+                        <td style="background-color: #ff0000;">{{ item?.sold_product?.name }}</td>
+                        <td>{{ item?.number }}</td>
+                        <td>{{ item?.sold_product?.code }}</td>
+                        <td>{{ item?.sold_product?.deadline }}</td>
+                        <td>{{ item?.sold_product?.company_name }}</td>
+                        <td>{{ item?.sold_product?.price100 }} so'm</td>
+                        <td>{{ excelTable.payment_type }}</td>
+                    </tr>
+                </tbody>
+            </table>
+
         </div>
         <paginate :page-count="Orders?.pages || 0" :click-handler="getAllOrders" :prev-text="'Prev'" :next-text="'Next'"
             :container-class="'paginationClass'">

@@ -14,7 +14,8 @@
     "vue": "^3.4.29",
     "vue-final-modal": "^4.5.4",
     "vue-router": "^4.3.3",
-    "vuejs-paginate-next": "^1.0.2"
+    "vuejs-paginate-next": "^1.0.2",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.5",
