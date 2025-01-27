@@ -2,7 +2,7 @@
   <div class="container">
     <div style="display: flex; justify-content: center; align-items: center">
       <div class="search-container">
-        <i class="search-icon">🔍</i>
+        <i class="search-icon"><img src="../assets/search.svg" alt=""></i>
         <input type="text" placeholder="Qidirish..." v-model="search" class="search-box" @input="getAllProducts" />
       </div>
       <i class="filter-icon"><img src="../assets/hamburger.png" alt="" /></i>
@@ -23,10 +23,10 @@
             </div>
             <div class="product-info">
               <div style="display: flex">
-                <p style="padding-right: 10px; padding-bottom: 2px; padding-top: 10px;font-weight: 400;">Muddati: {{
+                <p style="padding-right: 10px; padding-bottom: 2px; padding-top: 3px;font-weight: 400;">Muddati: {{
                   item.deadline.slice(0,10) }}
                 </p>
-                <p style="padding-right: 10px; padding-bottom: 2px; padding-top: 10px;">{{ item.company_name }}</p>
+                <p style="padding-right: 10px; padding-bottom: 2px; padding-top: 3px;">{{ item.company_name }}</p>
               </div>
               <div style="display: flex">
                 <p style="padding-right: 10px">Narxi 100%: <span style="font-weight: 600;">{{ item.price100 }}
@@ -182,7 +182,7 @@ function handleSaveModal(selectedProduct, enteredAmount) {
   width: 90%;
   border: 1px solid #0fcbc0;
   border-radius: 7px;
-  padding: 20px;
+  padding: 5px 20px;
   position: relative;
   display: flex;
   justify-content: space-between;
@@ -239,7 +239,7 @@ function handleSaveModal(selectedProduct, enteredAmount) {
   display: flex;
   align-items: center;
   border: 1px solid #69c2c0;
-  border-radius: 10px;
+  border-radius: 5px;
   padding: 5px 10px;
   background-color: #fff;
   width: 300px;

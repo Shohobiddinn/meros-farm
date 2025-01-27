@@ -7,7 +7,7 @@
         Bosh sahifa
       </button>
     </div>
-    <div style="overflow-y: auto; height: 70vh" v-else>
+    <div style="overflow-y: auto; height: 75vh" v-else>
       <div v-if="false" style="display: flex; justify-content: center; align-items: center">
         <div class="search-container">
           <i class="search-icon">🔍</i>
@@ -19,7 +19,7 @@
 
       <div>
         <div>
-          <div style="
+          <div v-if="false" style="
               display: flex;
               padding-top: 20px;
               justify-content: space-around;
@@ -45,7 +45,7 @@
                 <div class="product-info">
                   <div style="display: flex">
                     <p style="padding-right: 20px">
-                      Muddati: {{ item.product.deadline.slice(0,10) }}
+                      Muddati: {{ item.product.deadline.slice(0, 10) }}
                     </p>
                     <p>{{ item.product.company_name }}</p>
                   </div>
@@ -67,28 +67,48 @@
 
               <div style="display: flex; justify-content: space-between;align-items:center;">
                 <div></div>
-                <div class="counter-container">
-                  <button class="counter-btn" @click="decrement(item.product_id)">
-                    -
-                  </button>
-                  <span style="padding: 0 10px">{{ item.count }}</span>
-                  <button class="counter-btn" @click="increment(item.product_id)">
-                    +
-                  </button>
+                <div>
+                  <div class="counter-container">
+                    <button class="counter-btn" @click="decrement(item.product_id)">
+                      -
+                    </button>
+                    <span style="padding: 0 10px">{{ item.count }}</span>
+                    <button class="counter-btn" @click="increment(item.product_id)">
+                      +
+                    </button>
+                  </div>
+                  <p style="text-align: center; font-weight: 100; font-size: 12px;">{{ item.product[price] }} UZS</p>
                 </div>
-                <p>{{ item.product.price100 * item.count  }} UZS</p>
+                <p>{{ item.product[price] * item.count }} UZS</p>
               </div>
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="undeline orderFull" :style="products.length == 0 ? 'display:none' : ' '">
-      <p>{{ selectedTotalPrice }} so'm</p>
-      <button key="login-button" class="main_btn" @click="OrderPaymentType">
-        Bron qilish
-      </button>
+
+    <div :style="products.length == 0 ? 'display:none' : ' '">
+      <div class="">
+        <label>
+          <input type="radio" v-model="price" name="region" value="price100" checked>
+          100%
+        </label> <br>
+        <label>
+          <input type="radio" v-model="price" name="region" value="price25">
+          25%
+        </label>
+      </div>
+      <div class="orderFull">
+        <button class="danger_btn" @click="OrderPaymentType">
+          O'chirish
+        </button>
+        <button key="login-button" class="main_btn" @click="OrderPaymentType">
+          Buyurtma bering
+          {{ selectedTotalPrice }} UZS
+        </button>
+      </div>
     </div>
+
     <Footer />
   </div>
 </template>
@@ -101,8 +121,8 @@ import { AllApi } from "@/core/api";
 import PaymentType from "./PaymentType.vue";
 import { VueFinalModal, useModal, useModalSlot } from "vue-final-modal";
 
+const price = ref('price100');
 const products = ref([]);
-
 const basket = ref([]);
 const basketCount = ref(0);
 const selectAll = ref(false);
@@ -115,14 +135,15 @@ function addToBasket(product) {
   // basketCount.value = basket.value.length;
 }
 
+
 // Подсчет суммы всех выбранных продуктов
 const selectedTotalPrice = computed(() => {
   return products.value
     .filter((item) => item.selected)
     .reduce((total, item) => {
-      const price = Number(item.product.price100) || 0;
+      const productPrice = Number(item.product[price.value]) || 0;
       const count = Number(item.count) || 1;
-      return total + price * count;
+      return total + productPrice * count;
     }, 0);
 });
 const selectedTotalPrice25 = computed(() => {
@@ -289,18 +310,33 @@ watch(
 
 .orderFull {
   position: fixed;
-  bottom: 90px;
+  bottom: 100px;
   display: flex;
-  justify-content: space-around;
+  justify-content: space-between;
+  gap: 20px;
   height: 40px;
-  padding: 10px 20px;
   width: 100% !important;
   background-color: white;
 }
 
 .main_btn {
-  width: 50%;
+  width: 45%;
   background-color: #62c4bf;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  height: 40px;
+  text-align: center !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+  transform: translateX(-20px);
+}
+
+.danger_btn {
+  width: 45%;
+  background-color: red;
   color: white;
   border: none;
   border-radius: 5px;
@@ -432,7 +468,7 @@ watch(
   width: 90%;
   border: 1px solid #0fcbc0;
   border-radius: 10px;
-  padding: 20px;
+  padding: 0 20px 0 20px;
   position: relative;
 
   /* justify-content: space-between; */

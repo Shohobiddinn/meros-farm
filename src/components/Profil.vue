@@ -1,36 +1,42 @@
 <template>
-  <div class="container">
+  <div class="">
     <div>
-    <div class="personal_info1">
-      <p>Shaxsiy kabinet</p>
-      <div class="personal_info2">
-        <p>Sizning balansingiz</p>
-        <h2>{{user.balance}}</h2>
-        <p>{{user.name}}</p>
+      <div class="personal_info1">
+        <p v-if="false">Shaxsiy kabinet</p>
+        <div class="personal_info2">
+          <p>Sizning balansingiz</p>
+          <div style="display: flex ; align-items: center; gap: 10px;">
+            <h2 style="font-weight: 600;">{{ user.balance }} </h2> UZS
+
+          </div>
+          <p>{{ user.name }}</p>
+        </div>
+      </div>
+      <div class="container">
+        <ul class="menu-list">
+          <li v-if="false" class="menu-item" @click="getOrders">
+            <img src="/src/assets/Group 2.png" alt="Orders Icon" class="icon" />
+            <span class="item-text">Buyurtmalarim</span>
+            <img src="/src/assets/arrow.png" alt="Arrow Icon" class="arrow" />
+          </li>
+          <li class="menu-item">
+            <img src="/src/assets/bell.png" alt="Notifications Icon" class="icon" />
+            <span class="item-text">Bildirishnomalar</span>
+            <img src="/src/assets/Vector.svg" alt="Arrow Icon" class="arrow" />
+          </li>
+          <li class="menu-item">
+            <img src="/src/assets/flag.png" alt="Language Icon" class="icon" />
+            <span class="item-text">Ilova tili</span>
+            <span class="item-subtext">O'zbekcha</span>
+            <img src="/src/assets/Vector.svg" alt="Arrow Icon" class="arrow" />
+          </li>
+        </ul>
+
       </div>
     </div>
-    <ul class="menu-list">
-      <li class="menu-item" @click="getOrders">
-        <img src="/src/assets/Group 2.png" alt="Orders Icon" class="icon" />
-        <span class="item-text">Buyurtmalarim</span>
-        <img src="/src/assets/arrow.png" alt="Arrow Icon" class="arrow" />
-      </li>
-      <li class="menu-item">
-        <img src="/src/assets/bell.png" alt="Notifications Icon" class="icon" />
-        <span class="item-text">Bildirishnomalar</span>
-        <img src="/src/assets/arrow.png" alt="Arrow Icon" class="arrow" />
-      </li>
-      <li class="menu-item">
-        <img src="/src/assets/flag.png" alt="Language Icon" class="icon" />
-        <span class="item-text">Ilova tili</span>
-        <span class="item-subtext">O'zbekcha</span>
-        <img src="/src/assets/arrow.png" alt="Arrow Icon" class="arrow" />
-      </li>
-    </ul>
-  </div>
-  <div>
-    <button class="logout-button">Chiqish</button>
-  </div>
+    <div v-if="false">
+      <button class="logout-button">Chiqish</button>
+    </div>
     <Footer />
   </div>
 </template>
@@ -43,7 +49,7 @@ import { ref } from "vue";
 let orderData = ref([]);
 let user = ref({});
 
-function getUser(){
+function getUser() {
   AllApi.UserInfoApi.getUserCurrentUserUserGet().then((res) => {
     let { data } = res;
     user.value = data;
@@ -54,8 +60,8 @@ function getUser(){
 }
 getUser();
 
-function getOrders(){
-router.push("/groupOrders");
+function getOrders() {
+  router.push("/groupOrders");
 }
 </script>
 
@@ -64,10 +70,11 @@ router.push("/groupOrders");
   display: flex;
   justify-content: space-between;
   flex-direction: column;
-    padding: 10px;
-    width: 100%;
-  
+  padding: 10px;
+  width: 100%;
+
 }
+
 .personal_info1 {
   display: flex;
   justify-content: center;
@@ -75,17 +82,20 @@ router.push("/groupOrders");
   flex-direction: column;
   background: linear-gradient(#40c6bb, #28899e);
 }
+
 .personal_info2 {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  width: 90%;
   background-color: white;
   border-radius: 15px;
   margin-top: 20px;
   margin-bottom: 20px;
   padding: 10px;
 }
+
 .menu-list {
   list-style: none;
   padding: 0;

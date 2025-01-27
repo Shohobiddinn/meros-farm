@@ -2,12 +2,12 @@
     <footer class="footer">
     <router-link to="/mainPage" class="footer-item" active-class="active">
       <div class="img-wrapper">
-        <img src="/src/assets/Group 7.svg" alt="Categories">
+        <img src="/src/assets/home.svg" alt="Categories">
       </div>
     </router-link>
     <router-link to="/statistic" class="footer-item" active-class="active">
       <div class="img-wrapper">
-        <img src="/src/assets/statistic.png" alt="Categories">
+        <img src="/src/assets/statictic.svg" alt="Categories">
       </div>
     </router-link>
     <router-link to="/basket" class="footer-item" active-class="active">
@@ -73,12 +73,15 @@ onMounted(() => {
 }
 
 .footer-item img {
-  width: 30px;
-  height: 30px; /* Set a fixed height */
+  width: 38px;
+  height: 38px; /* Set a fixed height */
   cursor: pointer;
   transition: opacity 0.3s ease, border-radius 0.3s ease;
 }
-
+.footer-item:nth-child(1) img {
+  width: 55px;
+  height: 55px;
+}
 .footer-item.active .img-wrapper {
   border-bottom: 2px solid #0fcbc0; /* Active state border on wrapper */
 }

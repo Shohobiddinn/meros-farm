@@ -55,8 +55,9 @@ async function Login() {
   if (response.isOk) {
     // Redirect to the desired page after successful login
     // alert("Login successful");
-    router.push('/selectRegion')
+    // router.push('/selectRegion')
     // For example: router.push('/dashboard');
+    router.push('/mainPage')
   } else {
     alert("Login failed: " + response.message);
   }

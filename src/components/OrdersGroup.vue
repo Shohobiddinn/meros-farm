@@ -17,7 +17,7 @@
       </div>
       <div class="order-row">
         <span>Summa</span>
-        <span>{{ formatCurrency(item.money) }} so'm</span>
+        <span>{{ formatCurrency(item.money) }} UZS</span>
       </div>
     </div>
   </div>

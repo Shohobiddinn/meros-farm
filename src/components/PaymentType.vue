@@ -27,7 +27,7 @@
             <label for="naqd">Naqd pul</label>
             <div class="price">
               <!-- Цена для Naqd pul -->
-              <span>Jami narxi: {{ propss.selectedTotalPrice }} so'm</span>
+              <span>Jami narxi: {{ propss.selectedTotalPrice }} UZS</span>
             </div>
           </div>
 
@@ -44,7 +44,7 @@
               <!-- Цена для Nasiya -->
               <span
                 >Jami narxi (Nasiya):
-                {{ propss.selectedTotalPrice25 }} so'm</span
+                {{ propss.selectedTotalPrice25 }} UZS</span
               >
             </div>
           </div>

@@ -74,9 +74,9 @@ function downloadExcel(item) {
                         ta</span>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
-                    <span>Summa: {{ item.money }} so'm</span>
+                    <span>Summa: {{ item.money }} UZS</span>
                     <span>Summa: {{ item.trade.filter((fill) => fill.trade_status === false).reduce((count, current) =>
-                        count + (current.sold_product.price25 * current.number), 0) }} so'm</span>
+                        count + (current.sold_product.price25 * current.number), 0) }} UZS</span>
 
                 </div>
             </div>
@@ -91,7 +91,7 @@ function downloadExcel(item) {
                 </div>
                 <div style="display: flex; justify-content: space-between;">
                     <span>Narxi: {{ item.payment_type == 'NASIYA' ? trade.sold_product.price25 :
-                        trade.sold_product.price100 }} so'm</span>
+                        trade.sold_product.price100 }} UZS</span>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
                     <span>Miqdori: {{ trade.number }} ta</span><span>Jami summa: {{ item.payment_type == 'NASIYA' ?
@@ -125,9 +125,9 @@ function downloadExcel(item) {
                         <td>{{ item?.sold_product?.deadline }}</td>
                         <td>{{ item?.sold_product?.company_name }}</td>
                         <td>{{ excelTable.payment_type == 'NASIYA' ? item.sold_product.price25 :
-                            item?.sold_product?.price100 }} so'm</td>
+                            item?.sold_product?.price100 }} UZS</td>
                         <td>{{ excelTable.payment_type == 'NASIYA' ? item.sold_product.price25 * item?.number :
-                            item?.sold_product?.price100 * item?.number }} so'm</td>
+                            item?.sold_product?.price100 * item?.number }} UZS</td>
                         <td>{{ excelTable.payment_type == 'NASIYA' ? '25%' : '100%' }}</td>
                     </tr>
 
