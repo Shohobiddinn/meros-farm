@@ -20,16 +20,16 @@ const router = createRouter({
       path: '/selectRegion',
       name: 'selectRegion',
       component: SelectRegion,
-      meta:{
+      meta: {
         requiresAuth: true,
       }
-      
+
     },
     {
       path: '/groupOrders',
       name: 'groupOrders',
       component: OrdersGroup,
-      meta:{
+      meta: {
         requiresAuth: true,
       }
     },
@@ -37,7 +37,7 @@ const router = createRouter({
       path: '/orederDetails/:id',
       name: 'orderDetails',
       component: OrderDetails,
-      meta:{
+      meta: {
         requiresAuth: true,
       }
     },
@@ -46,7 +46,7 @@ const router = createRouter({
       path: '/mainPage',
       name: 'mainPage',
       component: MainPage,
-      meta:{
+      meta: {
         requiresAuth: true,
       }
     },
@@ -54,7 +54,7 @@ const router = createRouter({
       path: '/profil',
       name: 'profil',
       component: Profil,
-      meta:{
+      meta: {
         requiresAuth: true,
       }
     },
@@ -62,11 +62,11 @@ const router = createRouter({
       path: '/basket',
       name: 'basket',
       component: Basket,
-      meta:{
+      meta: {
         requiresAuth: true,
       }
     },
-  
+
     {
       path: '/about',
       name: 'about',
@@ -76,10 +76,18 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue')
     },
     {
-      path:'/statistic',
-      name:'statistic',
+      path: '/statistic',
+      name: 'statistic',
       component: () => import('../views/Statictic.vue'),
-      meta:{
+      meta: {
+        requiresAuth: true,
+      }
+    },
+    {
+      path: '/statistic-trade',
+      name: 'statistic  trade',
+      component: () => import('../views/StatisticTrade.vue'),
+      meta: {
         requiresAuth: true,
       }
     },
@@ -88,8 +96,8 @@ const router = createRouter({
       redirect: "/mainPage"
     }
   ]
-  
-  
+
+
 });
 router.beforeEach((to, from, next) => {
   if (to.path === "login" && auth.loggedIn()) {

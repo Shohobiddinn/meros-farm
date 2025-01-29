@@ -34,12 +34,12 @@ xhr.setRequestHeader(
 );
 xhr.send();
 export const AllApi = {
-  UserApi:new MerosApi.UserAuthSectionApi(),
+  UserApi: new MerosApi.UserAuthSectionApi(),
   UserInfoApi: new MerosApi.UserSectionApi(),
   BasketApi: new MerosApi.BasketSectionApi(),
   ProductsApi: new MerosApi.ProductsSectionApi(),
   OrderSectionApi: new MerosApi.OrderSectionApi(),
-  SoldProductsSectionApi: new MerosApi.SoldProductsSectionApi()
+  SoldProductsSectionApi: new MerosApi.SoldProductsSectionApi(),
+  TradeSectionApi: new MerosApi.TradeSectionApi(),
 
-  
 };

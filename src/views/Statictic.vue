@@ -45,7 +45,7 @@ function downloadExcel(item) {
 <template>
     <div class="container" style="text-align: center;">
         <div class="search-container">
-            <i class="search-icon">🔍</i>
+            <i class="search-icon"><img src="../assets/search.svg" alt=""></i>
             <select class="search-box" v-model="status" @change="getAllOrders">
                 <option :value="null" selected>Barchasi</option>
                 <option value="true">Bron urilgan</option>
@@ -55,23 +55,22 @@ function downloadExcel(item) {
 
     </div>
 
-    <div class="container" style="background-color: #F6FBFC; overflow-y: auto; height: 80vh;">
+    <div class="container" style="background-color: #F6FBFC; overflow-y: auto; height: 80vh;"
+        v-if="Orders?.data?.length">
         <div v-for="(item, index) in Orders?.data" :key="index">
-            <div>
+            <RouterLink :to="{
+                path: '/statistic-trade',
+                query: {
+                    order_id: item.id
+                }
+            }" class="card">
                 <div style="display: flex; justify-content: space-between;">
                     <span style="font-weight: 600;">Buyurtma № {{ item.id }}</span>
                     <span> {{ item.payment_type == 'NASIYA' ? '25%' : '100%' }} </span>
-                    <span v-if="item.status == 1"
-                        style="display: flex; align-items: center;font-weight: 600;cursor: pointer;"
-                        @click="downloadExcel(item)"><img src="../assets/excell.svg" width="18" height="15" alt="">
-                        Yuklab
-                        olish</span>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
-                    <span>Dorilar soni {{ item.number }} ta</span>
-                    <span v-if="item.status == 1">Chiqmagan dorilar soni {{ item.trade.filter((fill) =>
-                        fill.trade_status == false).length }}
-                        ta</span>
+                    <span>Sana </span>
+                    <span>{{ item?.created_at ? item?.created_at.slice(0, 10) : '' }} </span>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
                     <span>Summa: {{ item.money }} UZS</span>
@@ -79,65 +78,15 @@ function downloadExcel(item) {
                         count + (current.sold_product.price25 * current.number), 0) }} UZS</span>
 
                 </div>
-            </div>
-            <div style="background-color: #fff; border-radius: 7px; padding: 0 10px; margin: 15px 0;"
-                v-for="trade in item.trade">
-                <h4 style="text-align: center; font-weight: 600;">
-                    {{ trade.sold_product.name }}
-                </h4>
-                <div style="display: flex; justify-content: space-between;">
-                    <span>Muddati: {{ trade.sold_product.deadline.slice(0, 10) }}</span><span>{{
-                        trade.sold_product.company_name }}</span>
-                </div>
-                <div style="display: flex; justify-content: space-between;">
-                    <span>Narxi: {{ item.payment_type == 'NASIYA' ? trade.sold_product.price25 :
-                        trade.sold_product.price100 }} UZS</span>
-                </div>
-                <div style="display: flex; justify-content: space-between;">
-                    <span>Miqdori: {{ trade.number }} ta</span><span>Jami summa: {{ item.payment_type == 'NASIYA' ?
-                        trade.sold_product.price25 * trade.number : trade.sold_product.price100 * trade.number }}
-                        so’m</span>
-                </div>
-            </div>
-        </div>
-        <div v-if="excelTable" id="downloadTable">
-            <table v-show="false">
-                <thead>
-                    <tr>
-                        <th>№</th>
-                        <th>Dori nomi</th>
-                        <th>Soni</th>
-                        <th>Seriya raqami</th>
-                        <th>Muddati</th>
-                        <th>Firma</th>
-                        <th>Narxi</th>
-                        <th>Jami summa</th>
-                        <th>To'lov turi</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr v-for="(item, index) in excelTable.trade" :key="index"
-                        :style="{ background: item.trade_status === null ? 'transparent' : item.trade_status === false ? '#FF0000' : '#00FF00' }">
-                        <td>{{ item?.id }}</td>
-                        <td>{{ item?.sold_product?.name }}</td>
-                        <td>{{ item?.number }}</td>
-                        <td>{{ `${item?.sold_product?.code}` }}</td>
-                        <td>{{ item?.sold_product?.deadline }}</td>
-                        <td>{{ item?.sold_product?.company_name }}</td>
-                        <td>{{ excelTable.payment_type == 'NASIYA' ? item.sold_product.price25 :
-                            item?.sold_product?.price100 }} UZS</td>
-                        <td>{{ excelTable.payment_type == 'NASIYA' ? item.sold_product.price25 * item?.number :
-                            item?.sold_product?.price100 * item?.number }} UZS</td>
-                        <td>{{ excelTable.payment_type == 'NASIYA' ? '25%' : '100%' }}</td>
-                    </tr>
-
-                </tbody>
-            </table>
-
+            </RouterLink>
         </div>
         <paginate :page-count="Orders?.pages || 0" :click-handler="getAllOrders" :prev-text="'Prev'" :next-text="'Next'"
             :container-class="'paginationClass'">
         </paginate>
+    </div>
+    <div class="container" style="background-color: #F6FBFC; overflow-y: auto; height: 80vh;"
+        v-else>
+        <h3 style="text-align: center;">Ma'lumot topilmadi</h3>
     </div>
     <Footer />
 </template>
@@ -178,27 +127,35 @@ function downloadExcel(item) {
 }
 
 .search-container {
-  display: flex;
-  align-items: center;
-  border: 1px solid #69c2c0;
-  border-radius: 10px;
-  padding: 5px 10px;
-  background-color: #fff;
-  width: 95%;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center;
+    border: 1px solid #69c2c0;
+    border-radius: 10px;
+    padding: 5px 10px;
+    background-color: #fff;
+    width: 95%;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .search-icon {
-  margin-right: 10px;
-  color: #8c8c8c;
-  font-size: 16px;
+    margin-right: 10px;
+    color: #8c8c8c;
+    font-size: 16px;
 }
 
 .search-box {
-  border: none;
-  outline: none;
-  width: 100%;
-  font-size: 16px;
-  color: #8c8c8c;
+    border: none;
+    outline: none;
+    width: 100%;
+    font-size: 16px;
+    color: #8c8c8c;
+}
+
+.card {
+    background-color: #fff;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 5px;
+    display: block;
 }
 </style>
