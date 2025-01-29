@@ -9,10 +9,15 @@
     </div>
     <div style="overflow-y: auto; height: 80vh;">
       <div class="scroll-container">
-        <div class="card" v-for="i in 5">
-          <img src="../assets/1.png" alt="">
-        </div>
-
+        <swiper :pagination="{
+          dynamicBullets: true,
+        }" :loop="true" :autoplay="{ delay: 1500 }" :modules="modules" style="height: 140px;">
+          <swiper-slide v-for="i in 5" >
+            <div class="card">
+              <img src="../assets/1.png" alt="" width="100%" height="100%">
+            </div>
+          </swiper-slide>
+        </swiper>
         <!-- Add more cards as needed -->
       </div>
       <div class="product-list">
@@ -24,7 +29,7 @@
             <div class="product-info">
               <div style="display: flex">
                 <p style="padding-right: 10px; padding-bottom: 2px; padding-top: 3px;font-weight: 400;">Muddati: {{
-                  item.deadline.slice(0,10) }}
+                  item.deadline.slice(0, 10) }}
                 </p>
                 <p style="padding-right: 10px; padding-bottom: 2px; padding-top: 3px;">{{ item.company_name }}</p>
               </div>
@@ -58,6 +63,17 @@ import AddNewProduct from "@/components/AddNewProduct.vue";
 import Footer from "@/components/Footer.vue";
 import { AllApi } from "@/core/api";
 import paginate from 'vuejs-paginate-next';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+
+// Import Swiper styles
+import 'swiper/css';
+
+import 'swiper/css/pagination';
+
+// import required modules
+import { Pagination } from 'swiper/modules';
+
+const modules = [Pagination]
 
 const products = ref([]);
 
@@ -287,14 +303,14 @@ function handleSaveModal(selectedProduct, enteredAmount) {
 
 .card {
   flex: 0 0 auto;
-  width: 260px;
+  width: 100%;
   height: 110px;
   margin-right: 20px;
   /* padding: 20px; */
   box-sizing: border-box;
   background: #f5f5f5;
   border: 1px solid #ddd;
-  border-radius: 15px;
+  border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -313,5 +329,17 @@ function handleSaveModal(selectedProduct, enteredAmount) {
 
 .scroll-container::-webkit-scrollbar-thumb:hover {
   background-color: #555;
+}
+
+.swiper-pagination {
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.swiper-pagination.swiper-pagination-bullets.swiper-pagination-horizontal {
+  /* transform: translateY(200px) !important; */
+
 }
 </style>
