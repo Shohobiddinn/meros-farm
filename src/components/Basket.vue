@@ -53,7 +53,7 @@
                     <p style="padding-right: 10px">
                       Narxi: <span style="font-weight:600">{{ item.product.price100 }} UZS</span>
                     </p>
-                    <button v-if="false" style="
+                    <button style="
                         background-color: inherit;
                         border: none;
                         cursor: pointer;
@@ -207,21 +207,11 @@ function getProducts(basketData) {
 }
 
 // Function to remove product from basket
-function removeFromBasket(product) {
-  // Find the product in the basket
-  const basketProduct = products.value.find((item) => item.id === product.id);
-  console.log(basketProduct);
-
-  if (basketProduct) {
-    // Decrement the count
-    if (basketProduct.count > 1) {
-      basketProduct.count--;
-    } else if (basketProduct.count === 1) {
-      // Keep the item if its count is 1
-      basket.value = basket.value.filter((item) => item.id !== product.id);
-    }
-    // Update basket count
-    // basketCount.value = basket.value.length;
+function removeFromBasket(item) {
+  const product = products.value.find((p) => p.product_id === item.product_id);
+  if (product) {
+    product.count = 0;
+    updateProductCount(item.product_id, product.count, product.id);
   }
 }
 
