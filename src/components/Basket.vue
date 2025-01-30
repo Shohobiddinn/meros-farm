@@ -99,7 +99,7 @@
         </label>
       </div>
       <div class="orderFull">
-        <button class="danger_btn" @click="OrderPaymentType">
+        <button class="danger_btn" @click="deleteAll">
           O'chirish
         </button>
         <button key="login-button" class="main_btn" @click="OrderPaymentType">
@@ -116,16 +116,36 @@
 <script setup>
 import { ref, computed, watch } from "vue";
 import Footer from "@/components/Footer.vue";
+import browserStore from "@/core/service/browser-store";
 import router from "@/router";
 import { AllApi } from "@/core/api";
 import PaymentType from "./PaymentType.vue";
 import { VueFinalModal, useModal, useModalSlot } from "vue-final-modal";
-
+import request from 'superagent';
 const price = ref('price100');
 const products = ref([]);
 const basket = ref([]);
 const basketCount = ref(0);
 const selectAll = ref(false);
+const token = ref('');
+async function deleteAll() {
+  try {
+    if (browserStore.getSession("token")) {
+      token.value = browserStore.getSession("token");
+    }
+    await request
+      .delete('https://merospharmfergana.uz/basket/delete')
+      .set('Authorization', `Bearer ${token.value}`) 
+      .then(res => {
+        window.location.reload();
+      })
+      .catch(err => console.error(err));
+
+  } catch (error) {
+    console.error("Error deleting all products:", error);
+  }
+}
+
 
 function addToBasket(product) {
   const existingProduct = basket.value.find((item) => item.id === product.id);

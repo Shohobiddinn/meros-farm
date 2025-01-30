@@ -5,14 +5,14 @@
         <i class="search-icon"><img src="../assets/search.svg" alt=""></i>
         <input type="text" placeholder="Qidirish..." v-model="search" class="search-box" @input="getAllProducts" />
       </div>
-      <i class="filter-icon"><img src="../assets/hamburger.png" alt="" /></i>
+      <i class="filter-icon" @click="modalOpen = true"><img src="../assets/hamburger.png" alt="" /></i>
     </div>
     <div style="overflow-y: auto; height: 80vh;">
-      <div class="scroll-container">
+      <div class="scroll-container" v-if="adversting">
         <swiper :pagination="{
           dynamicBullets: true,
         }" :loop="true" :autoplay="{ delay: 1500 }" :modules="modules" style="height: 140px;">
-          <swiper-slide v-for="i in 5" >
+          <swiper-slide v-for="i in 5">
             <div class="card">
               <img src="../assets/1.png" alt="" width="100%" height="100%">
             </div>
@@ -20,44 +20,67 @@
         </swiper>
         <!-- Add more cards as needed -->
       </div>
-      <div class="product-list">
-        <div class="product-card" v-for="(item, index) in products?.data" :key="index">
-          <div>
-            <div class="product-header">
-              <h3>{{ item.name }}</h3>
-            </div>
-            <div class="product-info">
-              <div style="display: flex">
-                <p style="padding-right: 10px; padding-bottom: 2px; padding-top: 3px;font-weight: 400;">Muddati: {{
-                  item.deadline.slice(0, 10) }}
-                </p>
-                <p style="padding-right: 10px; padding-bottom: 2px; padding-top: 3px;">{{ item.company_name }}</p>
+      <div v-if="products?.data?.length">
+        <div class="product-list"  :style="{ marginTop: !adversting ? '20px' : '0px' }">
+          <div class="product-card" v-for="(item, index) in products?.data" :key="index">
+            <div>
+              <div class="product-header">
+                <h3>{{ item.name }}</h3>
               </div>
-              <div style="display: flex">
-                <p style="padding-right: 10px">Narxi 100%: <span style="font-weight: 600;">{{ item.price100 }}
-                    UZS</span> </p>
-                <p>Narxi 75%: <span style="font-weight: 600;">{{ item.price100 }} UZS</span></p>
+              <div class="product-info">
+                <div style="display: flex">
+                  <p style="padding-right: 10px; padding-bottom: 2px; padding-top: 3px;font-weight: 400;">Muddati: {{
+                    item.deadline.slice(0, 10) }}
+                  </p>
+                  <p style="padding-right: 10px; padding-bottom: 2px; padding-top: 3px;">{{ item.company_name }}</p>
+                </div>
+                <div style="display: flex">
+                  <p style="padding-right: 10px">Narxi 100%: <span style="font-weight: 600;">{{ item.price100 }}
+                      UZS</span> </p>
+                  <p>Narxi 75%: <span style="font-weight: 600;">{{ item.price100 }} UZS</span></p>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="product-actions">
-            <img v-if="isNewProduct(item.created_at)" src="../assets/new.png" alt="" class="new-product-badge" />
-            <button class="add-to-cart-btn" @click="ShowProductAdd(item)">
-              <img src="../assets/garbage.png" alt="" />
-            </button>
+            <div class="product-actions">
+              <img v-if="isNewProduct(item.created_at)" src="../assets/new.png" alt="" class="new-product-badge" />
+              <button class="add-to-cart-btn" @click="ShowProductAdd(item)">
+                <img src="../assets/garbage.png" alt="" />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
 
-      <paginate :page-count="products?.pages || 0" :click-handler="getAllProducts" :prev-text="'Prev'"
-        :next-text="'Next'" :container-class="'paginationClass'">
-      </paginate>
+        <paginate :page-count="products?.pages || 0" :click-handler="getAllProducts" :prev-text="'Prev'"
+          :next-text="'Next'" :container-class="'paginationClass'">
+        </paginate>
+
+      </div>
+      <div v-else>
+        <h3 style="text-align: center; margin-top: 20px;">Ma'lumot topilmadi</h3>
+      </div>
     </div>
     <Footer />
+    <!-- Modal -->
+
+    <div class="modal" v-if="modalOpen" @click="closeModal">
+      <div class="content">
+        <div>
+          <label for="toggle">
+            <input type="checkbox" id="toggle" v-model="adversting" />
+            {{ adversting ? "Reklamani yoqish" : "Reklamani o'chirish" }}
+          </label><br>
+          <label for="radio2"> <input type="checkbox" name="radio" id="radio2" v-model="newProduct"> Yangi
+            tovarlar</label>
+        </div>
+        <div>
+
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { VueFinalModal, useModal, useModalSlot } from "vue-final-modal";
 import AddNewProduct from "@/components/AddNewProduct.vue";
 import Footer from "@/components/Footer.vue";
@@ -74,9 +97,10 @@ import 'swiper/css/pagination';
 import { Pagination } from 'swiper/modules';
 
 const modules = [Pagination]
-
+const adversting = ref(true);
+const newProduct = ref(false);
 const products = ref([]);
-
+const modalOpen = ref(false);
 const basket = ref([]);
 const basketQuantity = ref(0);
 const search = ref(null)
@@ -103,11 +127,18 @@ function ShowProductAdd(product) {
   });
   open();
 }
-
+async function closeModal() {
+  setTimeout(() => {
+    modalOpen.value = false;
+  }, 500);
+}
+watch(newProduct, (value) => {
+  getAllProducts();
+});
 async function getAllProducts(page = 1) {
   let all = await AllApi.ProductsApi.getProductsProductsGet({
     search: search.value,
-    status: null,
+    status: !newProduct.value ? null : true,
     companyName: null,
     branchId: null,
     id: null,
@@ -341,5 +372,25 @@ function handleSaveModal(selectedProduct, enteredAmount) {
 .swiper-pagination.swiper-pagination-bullets.swiper-pagination-horizontal {
   /* transform: translateY(200px) !important; */
 
+}
+
+.modal {
+  position: fixed;
+  z-index: 10;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal .content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  border-radius: 10px;
 }
 </style>
