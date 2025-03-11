@@ -3,12 +3,19 @@
     <div class="empty_basket" v-if="products?.length === 0">
       <p class="empty_basket_p">Savat</p>
       <p class="empty_basket_p">Savatda hozircha mahsulot yo'q</p>
-      <button key="login-button" class="main_btn" @click="router.push('/mainPage')">
+      <button
+        key="login-button"
+        class="main_btn"
+        @click="router.push('/mainPage')"
+      >
         Bosh sahifa
       </button>
     </div>
     <div style="overflow-y: auto; height: 75vh" v-else>
-      <div v-if="false" style="display: flex; justify-content: center; align-items: center">
+      <div
+        v-if="false"
+        style="display: flex; justify-content: center; align-items: center"
+      >
         <div class="search-container">
           <i class="search-icon">🔍</i>
           <input type="text" placeholder="Qidirish..." class="search-box" />
@@ -19,17 +26,27 @@
 
       <div>
         <div>
-          <div v-if="false" style="
+          <div
+            v-if="false"
+            style="
               display: flex;
               padding-top: 20px;
               justify-content: space-around;
-            ">
-            <p style="text-align: left; cursor: pointer" @click="deleteSelected">
+            "
+          >
+            <p
+              style="text-align: left; cursor: pointer"
+              @click="deleteSelected"
+            >
               Tanlanganlarini o'chirish
             </p>
             <div style="display: flex">
               <p style="padding-right: 5px">Hammasini tanlash</p>
-              <input type="checkbox" v-model="selectAll" @change="toggleSelectAll" />
+              <input
+                type="checkbox"
+                v-model="selectAll"
+                @change="toggleSelectAll"
+              />
             </div>
           </div>
           <div class="product-list">
@@ -38,7 +55,12 @@
                 <div class="product-header">
                   <h3>{{ item.product.name }}</h3>
                 </div>
-                <input type="checkbox" v-model="item.selected" @change="updateSelectAll" class="checkbox" />
+                <input
+                  type="checkbox"
+                  v-model="item.selected"
+                  @change="updateSelectAll"
+                  class="checkbox"
+                />
               </div>
 
               <div>
@@ -51,33 +73,59 @@
                   </div>
                   <div style="display: flex; justify-content: space-between">
                     <p style="padding-right: 10px">
-                      Narxi: <span style="font-weight:600">{{ item.product.price100 }} UZS</span>
+                      Narxi:
+                      <span style="font-weight: 600"
+                        >{{ item.product.price100 }} UZS</span
+                      >
                     </p>
-                    <button style="
+                    <button
+                      style="
                         background-color: inherit;
                         border: none;
                         cursor: pointer;
-                        color:red;
-                      " @click="removeFromBasket(item)">
+                        color: red;
+                      "
+                      @click="removeFromBasket(item)"
+                    >
                       <img src="../assets/trash.png" alt="" /> O'chirish
                     </button>
                   </div>
                 </div>
               </div>
 
-              <div style="display: flex; justify-content: space-between;align-items:center;">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
                 <div></div>
                 <div>
                   <div class="counter-container">
-                    <button class="counter-btn" @click="decrement(item.product_id)">
+                    <button
+                      class="counter-btn"
+                      @click="decrement(item.product_id)"
+                    >
                       -
                     </button>
                     <span style="padding: 0 10px">{{ item.count }}</span>
-                    <button class="counter-btn" @click="increment(item.product_id)">
+                    <button
+                      class="counter-btn"
+                      @click="increment(item.product_id)"
+                    >
                       +
                     </button>
                   </div>
-                  <p style="text-align: center; font-weight: 100; font-size: 12px;">{{ item.product[price] }} UZS</p>
+                  <p
+                    style="
+                      text-align: center;
+                      font-weight: 100;
+                      font-size: 12px;
+                    "
+                  >
+                    {{ item.product[price] }} UZS
+                  </p>
                 </div>
                 <p>{{ item.product[price] * item.count }} UZS</p>
               </div>
@@ -90,18 +138,23 @@
     <div :style="products.length == 0 ? 'display:none' : ' '">
       <div class="">
         <label>
-          <input type="radio" v-model="price" name="region" value="price100" checked>
+          <input
+            type="radio"
+            v-model="price"
+            name="region"
+            value="price100"
+            checked
+          />
           100%
-        </label> <br>
+        </label>
+        <br />
         <label>
-          <input type="radio" v-model="price" name="region" value="price25">
+          <input type="radio" v-model="price" name="region" value="price25" />
           25%
         </label>
       </div>
       <div class="orderFull">
-        <button class="danger_btn" @click="deleteAll">
-          O'chirish
-        </button>
+        <button class="danger_btn" @click="deleteAll">O'chirish</button>
         <button key="login-button" class="main_btn" @click="OrderPaymentType">
           Buyurtma bering
           {{ selectedTotalPrice }} UZS
@@ -121,31 +174,29 @@ import router from "@/router";
 import { AllApi } from "@/core/api";
 import PaymentType from "./PaymentType.vue";
 import { VueFinalModal, useModal, useModalSlot } from "vue-final-modal";
-import request from 'superagent';
-const price = ref('price100');
+import request from "superagent";
+const price = ref("price100");
 const products = ref([]);
 const basket = ref([]);
 const basketCount = ref(0);
 const selectAll = ref(false);
-const token = ref('');
+const token = ref("");
 async function deleteAll() {
   try {
     if (browserStore.getSession("token")) {
       token.value = browserStore.getSession("token");
     }
     await request
-      .delete('https://merospharmfergana.uz/basket/delete')
-      .set('Authorization', `Bearer ${token.value}`) 
-      .then(res => {
+      .delete("https://merospharmfergana.uz/basket/delete")
+      .set("Authorization", `Bearer ${token.value}`)
+      .then((res) => {
         window.location.reload();
       })
-      .catch(err => console.error(err));
-
+      .catch((err) => console.error(err));
   } catch (error) {
     console.error("Error deleting all products:", error);
   }
 }
-
 
 function addToBasket(product) {
   const existingProduct = basket.value.find((item) => item.id === product.id);
@@ -154,7 +205,6 @@ function addToBasket(product) {
   }
   // basketCount.value = basket.value.length;
 }
-
 
 // Подсчет суммы всех выбранных продуктов
 const selectedTotalPrice = computed(() => {
@@ -183,8 +233,8 @@ async function updateProductCount(productId, newCount, id) {
       number: newCount,
       id: id,
     });
-    products.value = []
-    getAllBasketProducts()
+    products.value = [];
+    getAllBasketProducts();
     console.log(`Product ${productId} updated with count ${newCount}`);
   } catch (error) {
     console.error("Error updating product count:", error);
@@ -246,15 +296,14 @@ function updateSelectAll() {
 }
 
 function increment(productId) {
-  debugger
+  debugger;
   const product = products.value.find((p) => p.product_id === productId);
   if (product && product.count < 10) {
     product.count++;
     updateProductCount(productId, product.count, product.id);
     addToBasket(product);
-  }
-  else {
-    alert('ofierjofrijfg')
+  } else {
+    alert("ofierjofrijfg");
   }
 }
 function OrderPaymentType(product) {
@@ -271,16 +320,15 @@ function OrderPaymentType(product) {
           selectedTotalPrice25: selectedTotalPrice25.value,
           Save(quantity) {
             // addToBasket(product, quantity);
-            products.value = []
-            getAllBasketProducts()
+            products.value = [];
+            getAllBasketProducts();
             close();
           },
           Cancel(e) {
-            products.value = []
-            getAllBasketProducts()
+            products.value = [];
+            getAllBasketProducts();
             close();
           },
-
         },
       }),
     },
@@ -341,7 +389,6 @@ watch(
   justify-content: center;
   align-items: center;
   font-size: 18px;
-  transform: translateX(-20px);
 }
 
 .danger_btn {
