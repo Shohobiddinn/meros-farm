@@ -306,34 +306,21 @@ function increment(productId) {
     alert("ofierjofrijfg");
   }
 }
-function OrderPaymentType(product) {
-  const { open, close } = useModal({
-    component: VueFinalModal,
-    attrs: {},
-    slots: {
-      default: useModalSlot({
-        component: PaymentType,
-        attrs: {
-          title: "To'lov turi",
-          selectedProducts: products.value.filter((item) => item.selected),
-          selectedTotalPrice: selectedTotalPrice.value,
-          selectedTotalPrice25: selectedTotalPrice25.value,
-          Save(quantity) {
-            // addToBasket(product, quantity);
-            products.value = [];
-            getAllBasketProducts();
-            close();
-          },
-          Cancel(e) {
-            products.value = [];
-            getAllBasketProducts();
-            close();
-          },
-        },
-      }),
-    },
+async function OrderPaymentType() {
+  const productIds = products.value.map((product) => {
+    return { id: product.id };
   });
-  open();
+  try {
+    // Отправка данных через API
+    let response = await AllApi.OrderSectionApi.addOrderOrderAddPost({
+      basket: productIds,
+      payment_type: price.value !== "price25" ? "naqd" : "nasiya",
+    });
+    products.value = [];
+    getAllBasketProducts();
+  } catch (error) {
+    console.error("Ошибка при сохранении:", error);
+  }
 }
 
 function decrement(productId) {

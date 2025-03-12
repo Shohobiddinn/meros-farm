@@ -79,6 +79,7 @@ async function handleSave() {
     const productIds = propss.selectedProducts.map(product => {return {id:product.id}});
 
     try {
+      
     // Отправка данных через API
     let response = await AllApi.OrderSectionApi.addOrderOrderAddPost(
         {
