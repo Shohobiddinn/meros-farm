@@ -37,7 +37,7 @@
                 <div style="display: flex">
                   <p style="padding-right: 10px">Narxi 100%: <span style="font-weight: 600;">{{ item.price100 }}
                       UZS</span> </p>
-                  <p>Narxi 75%: <span style="font-weight: 600;">{{ item.price100 }} UZS</span></p>
+                  <p>Narxi 25%: <span style="font-weight: 600;">{{ item.price25 }} UZS</span></p>
                 </div>
               </div>
             </div>
