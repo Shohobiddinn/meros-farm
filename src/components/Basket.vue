@@ -11,7 +11,7 @@
         Bosh sahifa
       </button>
     </div>
-    <div style="overflow-y: auto; height: 75vh" v-else>
+    <div style="overflow-y: auto; height: 70vh" v-else>
       <div
         v-if="false"
         style="display: flex; justify-content: center; align-items: center"
@@ -155,7 +155,7 @@
       </div>
       <div class="orderFull">
         <button class="danger_btn" @click="deleteAll">O'chirish</button>
-        <button key="login-button" class="main_btn" @click="OrderPaymentType">
+        <button key="login-button" class="main_btn" style="transform: translateX(-17px);" @click="OrderPaymentType">
           Buyurtma bering
           {{ selectedTotalPrice }} UZS
         </button>
@@ -343,9 +343,10 @@ watch(
 
 <style scoped>
 .container {
-  padding: 10px;
+  padding: 10px 10px 100px 10px; 
   width: 100%;
   color: black;
+  
 }
 
 .undeline {
