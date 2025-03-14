@@ -42,7 +42,7 @@
               </div>
             </div>
             <div class="product-actions">
-              <img v-if="isNewProduct(item.created_at)" src="../assets/new.png" alt="" class="new-product-badge" />
+              <img v-if="item.status" src="../assets/new.png" alt="" class="new-product-badge" />
               <button class="add-to-cart-btn" @click="ShowProductAdd(item)">
                 <img src="../assets/garbage.png" alt="" />
               </button>
