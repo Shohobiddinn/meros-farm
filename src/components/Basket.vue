@@ -155,7 +155,12 @@
       </div>
       <div class="orderFull">
         <button class="danger_btn" @click="deleteAll">O'chirish</button>
-        <button key="login-button" class="main_btn" style="transform: translateX(-17px);" @click="OrderPaymentType">
+        <button
+          key="login-button"
+          class="main_btn"
+          style="transform: translateX(-17px)"
+          @click="OrderPaymentType"
+        >
           Buyurtma bering
           {{ selectedTotalPrice }} UZS
         </button>
@@ -175,6 +180,7 @@ import { AllApi } from "@/core/api";
 import PaymentType from "./PaymentType.vue";
 import { VueFinalModal, useModal, useModalSlot } from "vue-final-modal";
 import request from "superagent";
+import Swal from "sweetalert2";
 const price = ref("price100");
 const products = ref([]);
 const basket = ref([]);
@@ -182,20 +188,32 @@ const basketCount = ref(0);
 const selectAll = ref(false);
 const token = ref("");
 async function deleteAll() {
-  try {
-    if (browserStore.getSession("token")) {
-      token.value = browserStore.getSession("token");
+ await Swal.fire({
+    title: "Savatdagi barcha mahsulotlar o'chirilsinmi ?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Ha",
+    cancelButtonText: "Yo'q",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      try {
+        if (browserStore.getSession("token")) {
+          token.value = browserStore.getSession("token");
+        }
+        request
+          .delete("https://merospharmfergana.uz/basket/delete")
+          .set("Authorization", `Bearer ${token.value}`)
+          .then((res) => {
+            window.location.reload();
+          })
+          .catch((err) => console.error(err));
+      } catch (error) {
+        console.error("Error deleting all products:", error);
+      }
     }
-    await request
-      .delete("https://merospharmfergana.uz/basket/delete")
-      .set("Authorization", `Bearer ${token.value}`)
-      .then((res) => {
-        window.location.reload();
-      })
-      .catch((err) => console.error(err));
-  } catch (error) {
-    console.error("Error deleting all products:", error);
-  }
+  });
 }
 
 function addToBasket(product) {
@@ -307,20 +325,34 @@ function increment(productId) {
   }
 }
 async function OrderPaymentType() {
-  const productIds = products.value.map((product) => {
+  await Swal.fire({
+  title: "Buyurtma bermoqchimisiz ?",
+  icon: "warning",
+  showCancelButton: true,
+  confirmButtonColor: "#3085d6",
+  cancelButtonColor: "#d33",
+  confirmButtonText: "Ha",
+  cancelButtonText: "Yo'q",
+}).then((result) => {
+  if (result.isConfirmed) {
+    const productIds = products.value.map((product) => {
     return { id: product.id };
   });
   try {
     // Отправка данных через API
-    let response = await AllApi.OrderSectionApi.addOrderOrderAddPost({
+    let response =  AllApi.OrderSectionApi.addOrderOrderAddPost({
       basket: productIds,
       payment_type: price.value !== "price25" ? "naqd" : "nasiya",
     });
     products.value = [];
     getAllBasketProducts();
+    window.location.reload();
   } catch (error) {
     console.error("Ошибка при сохранении:", error);
   }
+  }
+});
+
 }
 
 function decrement(productId) {
@@ -343,10 +375,9 @@ watch(
 
 <style scoped>
 .container {
-  padding: 10px 10px 100px 10px; 
+  padding: 10px 10px 100px 10px;
   width: 100%;
   color: black;
-  
 }
 
 .undeline {
