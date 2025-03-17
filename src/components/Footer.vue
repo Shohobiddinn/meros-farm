@@ -36,7 +36,7 @@ async function basketBadge(product_id = null, page = 1){
     status: null,
     id: null,
     page: page,
-    limit: 25,
+    limit: 9999999999999,
     product_id: product_id,
   });
   basket.value = all.data.data;

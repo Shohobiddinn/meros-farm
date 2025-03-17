@@ -269,7 +269,7 @@ async function getAllBasketProducts(product_id = null, page = 1) {
     status: null,
     id: null,
     page: page,
-    limit: 25,
+    limit: 999999999999,
     product_id: product_id,
   });
   const { data } = all;
