@@ -420,7 +420,7 @@ function handleSaveModal(selectedProduct, enteredAmount) {
               </div>
               <div class="product-info">
                 <div style="display: flex">
-                  <p style="padding-right: 10px; padding-bottom: 2px; padding-top: 3px;font-weight: 400;">Muddati: {{ item.deadline.slice(0, 10) }}</p>
+                  <p style="padding-right: 10px; padding-bottom: 2px; padding-top: 3px;font-weight: 400;">Muddati: {{ item?.deadline }}</p>
                   <p style="padding-right: 10px; padding-bottom: 2px; padding-top: 3px;">{{ item.company_name }}</p>
                 </div>
                 <div style="display: flex">
