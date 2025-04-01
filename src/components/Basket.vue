@@ -67,7 +67,7 @@
                 <div class="product-info">
                   <div style="display: flex">
                     <p style="padding-right: 20px">
-                      Muddati: {{ item.product.deadline.slice(0, 10) }}
+                      Muddati: {{ item.product.deadline }}
                     </p>
                     <p>{{ item.product.company_name }}</p>
                   </div>

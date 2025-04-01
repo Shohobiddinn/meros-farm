@@ -91,7 +91,7 @@ function downloadExcel(item) {
                     {{ trade.sold_product.name }}
                 </h4>
                 <div style="display: flex; justify-content: space-between;">
-                    <span>Muddati: {{ trade.sold_product.deadline.slice(0, 10) }}</span><span>{{
+                    <span>Muddati: {{ trade.sold_product.deadline }}</span><span>{{
                         trade.sold_product.company_name }}</span>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
