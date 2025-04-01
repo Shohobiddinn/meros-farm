@@ -1,182 +1,3 @@
-<!-- <template>
-  <div class="container">
-    <div style="display: flex; justify-content: center; align-items: center">
-      <div class="search-container">
-        <i class="search-icon"><img src="../assets/search.svg" alt=""></i>
-        <input type="text" placeholder="Qidirish..." v-model="search" class="search-box" @input="getAllProducts" />
-      </div>
-      <i class="filter-icon" @click="modalOpen = true"><img src="../assets/hamburger.png" alt="" /></i>
-    </div>
-    <div style="overflow-y: auto; height: 80vh;">
-      <div class="scroll-container" v-if="adversting">
-        <swiper :pagination="{
-          dynamicBullets: true,
-        }" :loop="true" :autoplay="{ delay: 1500 }" :modules="modules" style="height: 140px;">
-          <swiper-slide v-for="i in 5">
-            <div class="card">
-              <img src="../assets/1.png" alt="" width="100%" height="100%">
-            </div>
-          </swiper-slide>
-        </swiper>
-      </div>
-      <div v-if="products?.data?.length">
-        <div class="product-list"  :style="{ marginTop: !adversting ? '20px' : '0px' }">
-          <div class="product-card" v-for="(item, index) in products?.data" :key="index">
-            <div>
-              <div class="product-header">
-                <h3>{{ item.name }}</h3>
-              </div>
-              <div class="product-info">
-                <div style="display: flex">
-                  <p style="padding-right: 10px; padding-bottom: 2px; padding-top: 3px;font-weight: 400;">Muddati: {{
-                    item.deadline.slice(0, 10) }}
-                  </p>
-                  <p style="padding-right: 10px; padding-bottom: 2px; padding-top: 3px;">{{ item.company_name }}</p>
-                </div>
-                <div style="display: flex">
-                  <p style="padding-right: 10px">Narxi 100%: <span style="font-weight: 600;">{{ item.price100 }}
-                      UZS</span> </p>
-                  <p>Narxi 25%: <span style="font-weight: 600;">{{ item.price25 }} UZS</span></p>
-                </div>
-              </div>
-            </div>
-            <div class="product-actions">
-              <img v-if="item.status" src="../assets/new.png" alt="" class="new-product-badge" />
-              <button class="add-to-cart-btn" @click="ShowProductAdd(item)">
-                <img src="../assets/garbage.png" alt="" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <paginate :page-count="products?.pages || 0" :click-handler="getAllProducts" :prev-text="'Prev'"
-          :next-text="'Next'" :container-class="'paginationClass'">
-        </paginate>
-
-      </div>
-      <div v-else>
-        <h3 style="text-align: center; margin-top: 20px;">Ma'lumot topilmadi</h3>
-      </div>
-    </div>
-    <Footer />
-
-    <div class="modal" v-if="modalOpen" @click="closeModal">
-      <div class="content">
-        <div>
-          <label for="toggle">
-            <input type="checkbox" id="toggle" v-model="adversting" />
-            {{ adversting ? "Reklamani yoqish" : "Reklamani o'chirish" }}
-          </label><br>
-          <label for="radio2"> <input type="checkbox" name="radio" id="radio2" v-model="newProduct"> Yangi
-            tovarlar</label>
-        </div>
-        <div>
-
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-<script setup>
-import { ref, watch } from "vue";
-import { VueFinalModal, useModal, useModalSlot } from "vue-final-modal";
-import AddNewProduct from "@/components/AddNewProduct.vue";
-import Footer from "@/components/Footer.vue";
-import { AllApi } from "@/core/api";
-import paginate from 'vuejs-paginate-next';
-import { Swiper, SwiperSlide } from 'swiper/vue';
-
-// Import Swiper styles
-import 'swiper/css';
-
-import 'swiper/css/pagination';
-
-// import required modules
-import { Pagination } from 'swiper/modules';
-
-const modules = [Pagination]
-const adversting = ref(true);
-const newProduct = ref(false);
-const products = ref([]);
-const modalOpen = ref(false);
-const basket = ref([]);
-const basketQuantity = ref(0);
-const search = ref(null)
-function ShowProductAdd(product) {
-  const { open, close } = useModal({
-    component: VueFinalModal,
-    attrs: {},
-    slots: {
-      default: useModalSlot({
-        component: AddNewProduct,
-        attrs: {
-          title: product.name,
-          product_id: product.id,
-          Save(quantity) {
-            // addToBasket(product, quantity);
-            close();
-          },
-          Cancel(e) {
-            close();
-          },
-        },
-      }),
-    },
-  });
-  open();
-}
-async function closeModal() {
-  setTimeout(() => {
-    modalOpen.value = false;
-  }, 500);
-}
-watch(newProduct, (value) => {
-  getAllProducts();
-});
-async function getAllProducts(page = 1) {
-  let all = await AllApi.ProductsApi.getProductsProductsGet({
-    search: search.value,
-    status: !newProduct.value ? null : true,
-    companyName: null,
-    branchId: null,
-    id: null,
-    page: page,
-    limit: 25
-  });
-  const { data } = all;
-  if (data) {
-
-    products.value = data;
-    return data;
-  }
-  return [];
-}
-getAllProducts();
-
-// Функция для проверки, является ли продукт "новым"
-function isNewProduct(created_at) {
-  const productDate = new Date(created_at);
-  const currentDate = new Date();
-  const differenceInTime = currentDate - productDate;
-  const differenceInDays = differenceInTime / (1000 * 3600 * 24);
-  return differenceInDays <= 3; // Возвращает true, если продукт был добавлен за последние 3 дня
-}
-// Updated function to add products to basket
-function addToBasket(product, amount) {
-  const existingProduct = basket.value.find((item) => item.id === product.id);
-  if (existingProduct) {
-    existingProduct.count += amount; // Add the entered amount to the existing count
-  } else {
-    basket.value.push({ ...product, count: amount }); // Add new product with the entered amount
-  }
-  basketCount.value = basket.value.length;
-}
-
-// Function called after saving from the modal
-function handleSaveModal(selectedProduct, enteredAmount) {
-  addToBasket(selectedProduct, enteredAmount);
-}
-</script> -->
 
 <style scoped>
 .container {
@@ -404,9 +225,29 @@ function handleSaveModal(selectedProduct, enteredAmount) {
     <div style="overflow-y: auto; height: 80vh;" @scroll="handleScroll">
       <div class="scroll-container" v-if="adversting">
         <swiper :pagination="{ dynamicBullets: true }" :loop="true" :autoplay="{ delay: 1500 }" :modules="modules" style="height: 140px;">
-          <swiper-slide v-for="i in 5" :key="i">
+          <swiper-slide >
             <div class="card">
-              <img src="../assets/1.png" alt="" width="100%" height="100%">
+              <img src="../assets/photo_2025-03-28_09-41-15.jpg" alt="" width="100%" height="100%">
+            </div>
+          </swiper-slide>
+          <swiper-slide >
+            <div class="card">
+              <img src="../assets/photo_2025-03-28_09-41-31.jpg" alt="" width="100%" height="100%">
+            </div>
+          </swiper-slide>
+          <swiper-slide >
+            <div class="card">
+              <img src="../assets/photo_2025-03-28_09-41-37.jpg" alt="" width="100%" height="100%">
+            </div>
+          </swiper-slide>
+          <swiper-slide >
+            <div class="card">
+              <img src="../assets/photo_2025-03-28_09-41-53.jpg" alt="" width="100%" height="100%">
+            </div>
+          </swiper-slide>
+          <swiper-slide >
+            <div class="card">
+              <img src="../assets/photo_2025-03-28_09-41-57.jpg" alt="" width="100%" height="100%">
             </div>
           </swiper-slide>
         </swiper>
