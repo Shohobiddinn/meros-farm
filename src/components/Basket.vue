@@ -3,19 +3,12 @@
     <div class="empty_basket" v-if="products?.length === 0">
       <p class="empty_basket_p">Savat</p>
       <p class="empty_basket_p">Savatda hozircha mahsulot yo'q</p>
-      <button
-        key="login-button"
-        class="main_btn"
-        @click="router.push('/mainPage')"
-      >
+      <button key="login-button" class="main_btn" @click="router.push('/mainPage')">
         Bosh sahifa
       </button>
     </div>
     <div style="overflow-y: auto; height: 70vh" v-else>
-      <div
-        v-if="false"
-        style="display: flex; justify-content: center; align-items: center"
-      >
+      <div v-if="false" style="display: flex; justify-content: center; align-items: center">
         <div class="search-container">
           <i class="search-icon">🔍</i>
           <input type="text" placeholder="Qidirish..." class="search-box" />
@@ -26,27 +19,17 @@
 
       <div>
         <div>
-          <div
-            v-if="false"
-            style="
+          <div v-if="false" style="
               display: flex;
               padding-top: 20px;
               justify-content: space-around;
-            "
-          >
-            <p
-              style="text-align: left; cursor: pointer"
-              @click="deleteSelected"
-            >
+            ">
+            <p style="text-align: left; cursor: pointer" @click="deleteSelected">
               Tanlanganlarini o'chirish
             </p>
             <div style="display: flex">
               <p style="padding-right: 5px">Hammasini tanlash</p>
-              <input
-                type="checkbox"
-                v-model="selectAll"
-                @change="toggleSelectAll"
-              />
+              <input type="checkbox" v-model="selectAll" @change="toggleSelectAll" />
             </div>
           </div>
           <div class="product-list">
@@ -55,12 +38,7 @@
                 <div class="product-header">
                   <h3>{{ item.product.name }}</h3>
                 </div>
-                <input
-                  type="checkbox"
-                  v-model="item.selected"
-                  @change="updateSelectAll"
-                  class="checkbox"
-                />
+                <input type="checkbox" v-model="item.selected" @change="updateSelectAll" class="checkbox" />
               </div>
 
               <div>
@@ -74,56 +52,41 @@
                   <div style="display: flex; justify-content: space-between">
                     <p style="padding-right: 10px">
                       Narxi:
-                      <span style="font-weight: 600"
-                        >{{ item.product.price100 }} UZS</span
-                      >
+                      <span style="font-weight: 600">{{ item.product.price100 }} UZS</span>
                     </p>
-                    <button
-                      style="
+                    <button style="
                         background-color: inherit;
                         border: none;
                         cursor: pointer;
                         color: red;
-                      "
-                      @click="removeFromBasket(item)"
-                    >
+                      " @click="removeFromBasket(item)">
                       <img src="../assets/trash.png" alt="" /> O'chirish
                     </button>
                   </div>
                 </div>
               </div>
 
-              <div
-                style="
+              <div style="
                   display: flex;
                   justify-content: space-between;
                   align-items: center;
-                "
-              >
+                ">
                 <div></div>
                 <div>
                   <div class="counter-container">
-                    <button
-                      class="counter-btn"
-                      @click="decrement(item.product_id)"
-                    >
+                    <button class="counter-btn" @click="decrement(item.product_id)">
                       -
                     </button>
                     <span style="padding: 0 10px">{{ item.count }}</span>
-                    <button
-                      class="counter-btn"
-                      @click="increment(item.product_id)"
-                    >
+                    <button class="counter-btn" @click="increment(item.product_id)">
                       +
                     </button>
                   </div>
-                  <p
-                    style="
+                  <p style="
                       text-align: center;
                       font-weight: 100;
                       font-size: 12px;
-                    "
-                  >
+                    ">
                     {{ item.product[price] }} UZS
                   </p>
                 </div>
@@ -138,13 +101,7 @@
     <div :style="products.length == 0 ? 'display:none' : ' '">
       <div class="">
         <label>
-          <input
-            type="radio"
-            v-model="price"
-            name="region"
-            value="price100"
-            checked
-          />
+          <input type="radio" v-model="price" name="region" value="price100" checked />
           100%
         </label>
         <br />
@@ -155,12 +112,7 @@
       </div>
       <div class="orderFull">
         <button class="danger_btn" @click="deleteAll">O'chirish</button>
-        <button
-          key="login-button"
-          class="main_btn"
-          style="transform: translateX(-17px)"
-          @click="OrderPaymentType"
-        >
+        <button key="login-button" class="main_btn" style="transform: translateX(-17px)" @click="OrderPaymentType">
           Buyurtma bering
           {{ selectedTotalPrice }} UZS
         </button>
@@ -188,7 +140,7 @@ const basketCount = ref(0);
 const selectAll = ref(false);
 const token = ref("");
 async function deleteAll() {
- await Swal.fire({
+  await Swal.fire({
     title: "Savatdagi barcha mahsulotlar o'chirilsinmi ?",
     icon: "warning",
     showCancelButton: true,
@@ -326,32 +278,34 @@ function increment(productId) {
 }
 async function OrderPaymentType() {
   await Swal.fire({
-  title: "Buyurtma bermoqchimisiz ?",
-  icon: "warning",
-  showCancelButton: true,
-  confirmButtonColor: "#3085d6",
-  cancelButtonColor: "#d33",
-  confirmButtonText: "Ha",
-  cancelButtonText: "Yo'q",
-}).then((result) => {
-  if (result.isConfirmed) {
-    const productIds = products.value.map((product) => {
-    return { id: product.id };
+    title: "Buyurtma bermoqchimisiz ?",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Ha",
+    cancelButtonText: "Yo'q",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      const productIds = products.value.map((product) => {
+        return { id: product.id };
+      });
+      try {
+        // Отправка данных через API
+        let response = AllApi.OrderSectionApi.addOrderOrderAddPost({
+          basket: productIds,
+          payment_type: price.value !== "price25" ? "naqd" : "nasiya",
+        });
+        setTimeout(() => {
+          products.value = [];
+          getAllBasketProducts();
+          window.location.reload();
+        }, 4000)
+      } catch (error) {
+        console.error("Ошибка при сохранении:", error);
+      }
+    }
   });
-  try {
-    // Отправка данных через API
-    let response =  AllApi.OrderSectionApi.addOrderOrderAddPost({
-      basket: productIds,
-      payment_type: price.value !== "price25" ? "naqd" : "nasiya",
-    });
-    products.value = [];
-    getAllBasketProducts();
-    window.location.reload();
-  } catch (error) {
-    console.error("Ошибка при сохранении:", error);
-  }
-  }
-});
 
 }
 

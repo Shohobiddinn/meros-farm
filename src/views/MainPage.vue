@@ -188,10 +188,10 @@
   transform: translateX(-50%);
 }
 
-.swiper-pagination.swiper-pagination-bullets.swiper-pagination-horizontal {
+/* .swiper-pagination.swiper-pagination-bullets.swiper-pagination-horizontal { */
   /* transform: translateY(200px) !important; */
 
-}
+/* } */
 
 .modal {
   position: fixed;
