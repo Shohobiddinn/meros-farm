@@ -222,8 +222,8 @@
       </div>
       <i class="filter-icon" @click="modalOpen = true"><img src="../assets/hamburger.png" alt="" /></i>
     </div>
-    <div style="overflow-y: auto; height: 80vh;" @scroll="handleScroll">
-      <div class="scroll-container" v-if="adversting">
+    <div style="overflow-y: auto; height: 84vh;" @scroll="handleScroll">
+      <div class="scroll-container" v-if="adversting && false">
         <swiper :pagination="{ dynamicBullets: true }" :loop="true" :autoplay="{ delay: 1500 }" :modules="modules" style="height: 140px;">
           <swiper-slide >
             <div class="card">
@@ -252,7 +252,7 @@
           </swiper-slide>
         </swiper>
       </div>
-      <div v-if="products.length">
+      <div v-if="products.length" style="margin-top: 10px;">
         <div class="product-list" :style="{ marginTop: !adversting ? '20px' : '0px' }">
           <div class="product-card" v-for="(item, index) in products" :key="index">
             <div>

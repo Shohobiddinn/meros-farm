@@ -70,7 +70,7 @@ function downloadExcel(item) {
                 </div>
                 <div style="display: flex; justify-content: space-between;">
                     <span>Sana </span>
-                    <span>{{ item?.created_at ? item?.created_at : '' }} </span>
+                    <span>{{ item?.created_at ? item?.created_at.slice(0,10) : '' }} </span>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
                     <span>Summa: {{ item.money }} UZS</span>

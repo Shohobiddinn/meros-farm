@@ -1,24 +1,31 @@
 <template>
-    <footer class="footer">
+  <footer class="footer">
     <router-link to="/mainPage" class="footer-item" active-class="active">
       <div class="img-wrapper">
-        <img src="/src/assets/home.svg" alt="Categories">
+        <img src="/src/assets/home.svg" alt="Categories"> <br>
+        <span style="display: inline-block; transform: translateY(-10px); color: #0fcbc0;">
+          Mahsulotlar
+
+        </span>
       </div>
     </router-link>
     <router-link to="/statistic" class="footer-item" active-class="active">
       <div class="img-wrapper">
-        <img src="/src/assets/statictic.svg" alt="Categories">
+        <img src="/src/assets/statictic.svg" alt="Categories"> <br>
+        Buyurtmalar
       </div>
     </router-link>
     <router-link to="/basket" class="footer-item" active-class="active">
       <div class="img-wrapper">
         <img src="/src/assets/Group 2.png" alt="Cart">
-        <span v-if="basket.length > 0" class="badge">{{ basket.length }}</span>
+        <span v-if="basket.length > 0" class="badge">{{ basket.length }}</span> <br>
+        Savat
       </div>
     </router-link>
     <router-link to="/profil" class="footer-item" active-class="active">
       <div class="img-wrapper">
-        <img src="/src/assets/Group.png" alt="User">
+        <img src="/src/assets/Group.png" alt="User"> <br>
+        Profil
       </div>
     </router-link>
   </footer>
@@ -31,7 +38,7 @@ import { onMounted, ref, watch } from 'vue';
 import { AllApi } from '@/core/api';
 const basket = ref([]);
 
-async function basketBadge(product_id = null, page = 1){
+async function basketBadge(product_id = null, page = 1) {
   let all = await AllApi.BasketApi.getBasketBasketGet({
     status: null,
     id: null,
@@ -57,7 +64,7 @@ onMounted(() => {
   justify-content: space-around;
   align-items: center;
   border-top: 2px solid #0fcbc0;
-  padding-top: 15px;
+  padding-top: 5px;
   background-color: white;
   z-index: 1000;
   box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
@@ -68,22 +75,23 @@ onMounted(() => {
   position: relative;
 }
 
-.img-wrapper {
-  padding-bottom: 5px; /* Add space between image and border */
-}
-
 .footer-item img {
   width: 38px;
-  height: 38px; /* Set a fixed height */
+  height: 38px;
+  /* Set a fixed height */
   cursor: pointer;
+  object-fit: contain;
   transition: opacity 0.3s ease, border-radius 0.3s ease;
 }
+
 .footer-item:nth-child(1) img {
   width: 55px;
   height: 55px;
 }
+
 .footer-item.active .img-wrapper {
-  border-bottom: 2px solid #0fcbc0; /* Active state border on wrapper */
+  border-bottom: 2px solid #0fcbc0;
+  /* Active state border on wrapper */
 }
 
 .footer-item img:hover {
@@ -110,5 +118,4 @@ onMounted(() => {
   font-size: 12px;
   font-weight: bold;
 }
-
 </style>
