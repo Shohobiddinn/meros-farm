@@ -277,6 +277,28 @@ function increment(productId) {
   }
 }
 async function OrderPaymentType() {
+  if (price.value == 'price100') {
+
+    if (selectedTotalPrice.value < 3000000) {
+      console.log('hello');
+      Swal.mixin({
+        toast: true,
+        position: 'top-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener('mouseenter', Swal.stopTimer)
+          toast.addEventListener('mouseleave', Swal.resumeTimer)
+        },
+      }).fire({
+        icon: 'warning',
+        title: 'Maʼlumot qiymati 3 000 000 dan yuqori bo\'lishi kerak',
+      })
+      return;
+    }
+  }
+
   await Swal.fire({
     title: "Buyurtma bermoqchimisiz ?",
     icon: "warning",

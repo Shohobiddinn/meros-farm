@@ -1,4 +1,3 @@
-
 <style scoped>
 .container {
   padding: 10px;
@@ -35,7 +34,6 @@
   /* Цвет границы совпадает с фоном */
 }
 
-
 .product-list {
   display: flex;
   flex-direction: column;
@@ -46,6 +44,17 @@
 
 .product-card {
   width: 90%;
+  border: 1px solid #0fcbc0;
+  border-radius: 7px;
+  padding: 5px 20px;
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-card2 {
+  width: 100%;
   border: 1px solid #0fcbc0;
   border-radius: 7px;
   padding: 5px 20px;
@@ -189,7 +198,7 @@
 }
 
 /* .swiper-pagination.swiper-pagination-bullets.swiper-pagination-horizontal { */
-  /* transform: translateY(200px) !important; */
+/* transform: translateY(200px) !important; */
 
 /* } */
 
@@ -217,42 +226,43 @@
   <div class="container">
     <div style="display: flex; justify-content: center; align-items: center">
       <div class="search-container">
-        <i class="search-icon"><img src="../assets/search.svg" alt=""></i>
+        <i class="search-icon"><img src="../assets/search.svg" alt="" /></i>
         <input type="text" placeholder="Qidirish..." v-model="search" class="search-box" @input="resetAndFetch" />
       </div>
       <i class="filter-icon" @click="modalOpen = true"><img src="../assets/hamburger.png" alt="" /></i>
     </div>
-    <div style="overflow-y: auto; height: 84vh;" @scroll="handleScroll">
+    <div style="overflow-y: auto; height: 84vh" @scroll="handleScroll">
       <div class="scroll-container" v-if="adversting && false">
-        <swiper :pagination="{ dynamicBullets: true }" :loop="true" :autoplay="{ delay: 1500 }" :modules="modules" style="height: 140px;">
-          <swiper-slide >
+        <swiper :pagination="{ dynamicBullets: true }" :loop="true" :autoplay="{ delay: 1500 }" :modules="modules"
+          style="height: 140px">
+          <swiper-slide>
             <div class="card">
-              <img src="../assets/photo_2025-03-28_09-41-15.jpg" alt="" width="100%" height="100%">
+              <img src="../assets/photo_2025-03-28_09-41-15.jpg" alt="" width="100%" height="100%" />
             </div>
           </swiper-slide>
-          <swiper-slide >
+          <swiper-slide>
             <div class="card">
-              <img src="../assets/photo_2025-03-28_09-41-31.jpg" alt="" width="100%" height="100%">
+              <img src="../assets/photo_2025-03-28_09-41-31.jpg" alt="" width="100%" height="100%" />
             </div>
           </swiper-slide>
-          <swiper-slide >
+          <swiper-slide>
             <div class="card">
-              <img src="../assets/photo_2025-03-28_09-41-37.jpg" alt="" width="100%" height="100%">
+              <img src="../assets/photo_2025-03-28_09-41-37.jpg" alt="" width="100%" height="100%" />
             </div>
           </swiper-slide>
-          <swiper-slide >
+          <swiper-slide>
             <div class="card">
-              <img src="../assets/photo_2025-03-28_09-41-53.jpg" alt="" width="100%" height="100%">
+              <img src="../assets/photo_2025-03-28_09-41-53.jpg" alt="" width="100%" height="100%" />
             </div>
           </swiper-slide>
-          <swiper-slide >
+          <swiper-slide>
             <div class="card">
-              <img src="../assets/photo_2025-03-28_09-41-57.jpg" alt="" width="100%" height="100%">
+              <img src="../assets/photo_2025-03-28_09-41-57.jpg" alt="" width="100%" height="100%" />
             </div>
           </swiper-slide>
         </swiper>
       </div>
-      <div v-if="products.length" style="margin-top: 10px;">
+      <div v-if="products.length" style="margin-top: 10px">
         <div class="product-list" :style="{ marginTop: !adversting ? '20px' : '0px' }">
           <div class="product-card" v-for="(item, index) in products" :key="index">
             <div>
@@ -261,12 +271,31 @@
               </div>
               <div class="product-info">
                 <div style="display: flex">
-                  <p style="padding-right: 10px; padding-bottom: 2px; padding-top: 3px;font-weight: 400;">Muddati: {{ item?.deadline }}</p>
-                  <p style="padding-right: 10px; padding-bottom: 2px; padding-top: 3px;">{{ item.company_name }}</p>
+                  <p style="
+                      padding-right: 10px;
+                      padding-bottom: 2px;
+                      padding-top: 3px;
+                      font-weight: 400;
+                    ">
+                    Muddati: {{ item?.deadline }}
+                  </p>
+                  <p style="
+                      padding-right: 10px;
+                      padding-bottom: 2px;
+                      padding-top: 3px;
+                    ">
+                    {{ item.company_name }}
+                  </p>
                 </div>
                 <div style="display: flex">
-                  <p style="padding-right: 10px">Narxi 100%: <span style="font-weight: 600;">{{ item.price100 }} UZS</span></p>
-                  <p>Narxi 25%: <span style="font-weight: 600;">{{ item.price25 }} UZS</span></p>
+                  <p style="padding-right: 10px">
+                    Narxi 100%:
+                    <span style="font-weight: 600">{{ item.price100 }} UZS</span>
+                  </p>
+                  <p>
+                    Narxi 25%:
+                    <span style="font-weight: 600">{{ item.price25 }} UZS</span>
+                  </p>
                 </div>
               </div>
             </div>
@@ -280,33 +309,90 @@
         </div>
       </div>
       <div v-else>
-        <h3 style="text-align: center; margin-top: 20px;">Ma'lumot topilmadi</h3>
+        <h3 style="text-align: center; margin-top: 20px">Ma'lumot topilmadi</h3>
       </div>
     </div>
     <Footer />
 
-    <div class="modal" v-if="modalOpen" @click="closeModal">
+    <div class="modal" v-if="modalOpen">
       <div class="content">
-        <div>
+        <button @click="modalOpen = false" class="" style="
+            float: inline-end;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            cursor: pointer;
+            transform: translate(15px, -15px);
+          ">
+          <i class="fa-solid fa-circle-xmark"></i>
+        </button>
+
+        <div v-if="false">
           <label for="toggle">
             <input type="checkbox" id="toggle" v-model="adversting" />
-            {{ adversting ? "Reklamani yoqish" : "Reklamani o'chirish" }}
-          </label><br>
-          <label for="radio2"> <input type="checkbox" name="radio" id="radio2" v-model="newProduct"> Yangi tovarlar</label>
+            {{
+              adversting ? "Reklamani yoqish" : "Reklamani o'chirish"
+            }} </label><br />
         </div>
+        <label for="radio2">
+          <input type="checkbox" name="radio" id="radio2" v-model="newProduct" />
+          Yangi tovarlar</label>
+
+        <h3>Mahsulot yangilangan vaqti:</h3>
+        <div style="display: flex; flex-direction: column; gap: 5px; margin-top: 0px;">
+          <div v-if="currentHour >= 7" class="product-card2">
+            <div>
+              <div class="product-header"></div>
+              <div class="product-info">
+                <div style="display: flex">
+                  <p style="padding-right: 10px">
+                    <span style="font-weight: 600">07:00 AM</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="currentHour >= 12" class="product-card2">
+            <div>
+              <div class="product-header"></div>
+              <div class="product-info">
+                <div style="display: flex">
+                  <p style="padding-right: 10px">
+                    <span style="font-weight: 600">12:00 PM</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div v-if="currentHour >= 17" class="product-card2">
+            <div>
+              <div class="product-header"></div>
+              <div class="product-info">
+                <div style="display: flex">
+                  <p style="padding-right: 10px">
+                    <span style="font-weight: 600">17:00 PM</span>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import Footer from "@/components/Footer.vue";
 import { AllApi } from "@/core/api";
-import { Swiper, SwiperSlide } from 'swiper/vue';
-import 'swiper/css';
-import 'swiper/css/pagination';
-import { Pagination } from 'swiper/modules';
+import { Swiper, SwiperSlide } from "swiper/vue";
+import "swiper/css";
+import "swiper/css/pagination";
+import { Pagination } from "swiper/modules";
 import { VueFinalModal, useModal, useModalSlot } from "vue-final-modal";
 import AddNewProduct from "@/components/AddNewProduct.vue";
 const modules = [Pagination];
@@ -326,7 +412,7 @@ async function fetchProducts() {
     search: search.value,
     status: newProduct.value ? true : null,
     page: page.value,
-    limit: 25
+    limit: 25,
   });
 
   if (response?.data) {
@@ -373,4 +459,10 @@ function resetAndFetch() {
 }
 
 fetchProducts();
+const currentHour = ref(new Date().getHours())
+onMounted(() => {
+  setInterval(() => {
+    currentHour.value = new Date().getHours()
+  }, 60000)
+})
 </script>
