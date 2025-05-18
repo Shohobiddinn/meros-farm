@@ -1,122 +1,135 @@
 <template>
   <div class="container">
-    <div class="empty_basket" v-if="products?.length === 0">
-      <p class="empty_basket_p">Savat</p>
-      <p class="empty_basket_p">Savatda hozircha mahsulot yo'q</p>
-      <button key="login-button" class="main_btn" @click="router.push('/mainPage')">
-        Bosh sahifa
-      </button>
-    </div>
-    <div style="overflow-y: auto; height: 70vh" v-else>
-      <div v-if="false" style="display: flex; justify-content: center; align-items: center">
-        <div class="search-container">
-          <i class="search-icon">🔍</i>
-          <input type="text" placeholder="Qidirish..." class="search-box" />
-        </div>
-        <i class="filter-icon"><img src="../assets/hamburger.png" alt="" /></i>
-      </div>
-      <div class="scroll-container"></div>
-
-      <div>
-        <div>
-          <div v-if="false" style="
-              display: flex;
-              padding-top: 20px;
-              justify-content: space-around;
-            ">
-            <p style="text-align: left; cursor: pointer" @click="deleteSelected">
-              Tanlanganlarini o'chirish
-            </p>
-            <div style="display: flex">
-              <p style="padding-right: 5px">Hammasini tanlash</p>
-              <input type="checkbox" v-model="selectAll" @change="toggleSelectAll" />
-            </div>
-          </div>
-          <div class="product-list">
-            <div class="product-card" v-for="item in products" :key="item.id">
-              <div style="display: flex; justify-content: space-around">
-                <div class="product-header">
-                  <h3>{{ item.product.name }}</h3>
-                </div>
-                <input type="checkbox" v-model="item.selected" @change="updateSelectAll" class="checkbox" />
-              </div>
-
-              <div>
-                <div class="product-info">
-                  <div style="display: flex">
-                    <p style="padding-right: 20px">
-                      Muddati: {{ item.product.deadline }}
-                    </p>
-                    <p>{{ item.product.company_name }}</p>
-                  </div>
-                  <div style="display: flex; justify-content: space-between">
-                    <p style="padding-right: 10px">
-                      Narxi:
-                      <span style="font-weight: 600">{{ item.product.price100 }} UZS</span>
-                    </p>
-                    <button style="
-                        background-color: inherit;
-                        border: none;
-                        cursor: pointer;
-                        color: red;
-                      " @click="removeFromBasket(item)">
-                      <img src="../assets/trash.png" alt="" /> O'chirish
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              <div style="
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                ">
-                <div></div>
-                <div>
-                  <div class="counter-container">
-                    <button class="counter-btn" @click="decrement(item.product_id)">
-                      -
-                    </button>
-                    <span style="padding: 0 10px">{{ item.count }}</span>
-                    <button class="counter-btn" @click="increment(item.product_id)">
-                      +
-                    </button>
-                  </div>
-                  <p style="
-                      text-align: center;
-                      font-weight: 100;
-                      font-size: 12px;
-                    ">
-                    {{ item.product[price] }} UZS
-                  </p>
-                </div>
-                <p>{{ item.product[price] * item.count }} UZS</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div :style="products.length == 0 ? 'display:none' : ' '">
-      <div class="">
-        <label>
-          <input type="radio" v-model="price" name="region" value="price100" checked />
-          100%
-        </label>
-        <br />
-        <label>
-          <input type="radio" v-model="price" name="region" value="price25" />
-          25%
-        </label>
-      </div>
-      <div class="orderFull">
-        <button class="danger_btn" @click="deleteAll">O'chirish</button>
-        <button key="login-button" class="main_btn" style="transform: translateX(-17px)" @click="OrderPaymentType">
-          Buyurtma bering
-          {{ selectedTotalPrice }} UZS
+    <div v-if="!loading">
+      <div class="empty_basket" v-if="products?.length === 0">
+        <p class="empty_basket_p">Savat</p>
+        <p class="empty_basket_p">Savatda hozircha mahsulot yo'q</p>
+        <button key="login-button" class="main_btn" @click="router.push('/mainPage')">
+          Bosh sahifa
         </button>
       </div>
+      <div style="overflow-y: auto; height: 70vh" v-else>
+        <div v-if="false" style="display: flex; justify-content: center; align-items: center">
+          <div class="search-container">
+            <i class="search-icon">🔍</i>
+            <input type="text" placeholder="Qidirish..." class="search-box" />
+          </div>
+          <i class="filter-icon"><img src="../assets/hamburger.png" alt="" /></i>
+        </div>
+        <div class="scroll-container"></div>
+
+        <div>
+          <div>
+            <div v-if="false" style="
+                display: flex;
+                padding-top: 20px;
+                justify-content: space-around;
+              ">
+              <p style="text-align: left; cursor: pointer" @click="deleteSelected">
+                Tanlanganlarini o'chirish
+              </p>
+              <div style="display: flex">
+                <p style="padding-right: 5px">Hammasini tanlash</p>
+                <input type="checkbox" v-model="selectAll" @change="toggleSelectAll" />
+              </div>
+            </div>
+            <div class="product-list">
+              <div class="product-card" v-for="item in products" :key="item.id">
+                <div style="display: flex; justify-content: space-around">
+                  <div class="product-header">
+                    <h3>{{ item.product.name }}</h3>
+                  </div>
+                  <input type="checkbox" v-model="item.selected" @change="updateSelectAll" class="checkbox" />
+                </div>
+
+                <div>
+                  <div class="product-info">
+                    <div style="display: flex">
+                      <p style="padding-right: 20px">
+                        Muddati: {{ item.product.deadline }}
+                      </p>
+                      <p>{{ item.product.company_name }}</p>
+                    </div>
+                    <div style="display: flex; justify-content: space-between">
+                      <p style="padding-right: 10px">
+                        Narxi:
+                        <span style="font-weight: 600">{{ item.product.price100 }} UZS</span>
+                      </p>
+                      <button style="
+                          background-color: inherit;
+                          border: none;
+                          cursor: pointer;
+                          color: red;
+                        " @click="removeFromBasket(item)">
+                        <img src="../assets/trash.png" alt="" /> O'chirish
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                  ">
+                  <div></div>
+                  <div>
+                    <div class="counter-container">
+                      <button class="counter-btn" @click="decrement(item.product_id)">
+                        -
+                      </button>
+                      <span style="padding: 0 10px">{{ item.count }}</span>
+                      <button class="counter-btn" @click="increment(item.product_id)">
+                        +
+                      </button>
+                    </div>
+                    <p style="
+                        text-align: center;
+                        font-weight: 100;
+                        font-size: 12px;
+                      ">
+                      {{ item.product[price] }} UZS
+                    </p>
+                  </div>
+                  <p>{{ item.product[price] * item.count }} UZS</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div :style="products.length == 0 ? 'display:none' : ' '">
+        <div class="">
+          <label>
+            <input type="radio" v-model="price" name="region" value="price100" checked />
+            100%
+          </label>
+          <br />
+          <label>
+            <input type="radio" v-model="price" name="region" value="price25" />
+            25%
+          </label>
+        </div>
+        <div class="orderFull">
+          <button class="danger_btn" @click="deleteAll">O'chirish</button>
+          <button key="login-button" class="main_btn" style="transform: translateX(-17px)" @click="OrderPaymentType">
+            Buyurtma bering
+            {{ selectedTotalPrice }} UZS
+          </button>
+        </div>
+      </div>
+
+    </div>
+    <div class="loading" v-else>
+      <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24">
+        <path fill="currentColor"
+          d="M10.72,19.9a8,8,0,0,1-6.5-9.79A7.77,7.77,0,0,1,10.4,4.16a8,8,0,0,1,9.49,6.52A1.54,1.54,0,0,0,21.38,12h.13a1.37,1.37,0,0,0,1.38-1.54,11,11,0,1,0-12.7,12.39A1.54,1.54,0,0,0,12,21.34h0A1.47,1.47,0,0,0,10.72,19.9Z">
+          <animateTransform attributeName="transform" dur="0.75s" repeatCount="indefinite" type="rotate"
+            values="0 12 12;360 12 12" />
+        </path>
+      </svg>
+
     </div>
 
     <Footer />
@@ -133,6 +146,7 @@ import PaymentType from "./PaymentType.vue";
 import { VueFinalModal, useModal, useModalSlot } from "vue-final-modal";
 import request from "superagent";
 import Swal from "sweetalert2";
+const loading = ref(false)
 const price = ref("price100");
 const products = ref([]);
 const basket = ref([]);
@@ -298,7 +312,7 @@ async function OrderPaymentType() {
       return;
     }
   }
-
+  loading.value = true;
   await Swal.fire({
     title: "Buyurtma bermoqchimisiz ?",
     icon: "warning",
@@ -318,19 +332,26 @@ async function OrderPaymentType() {
           basket: productIds,
           payment_type: price.value !== "price25" ? "naqd" : "nasiya",
         });
-        setTimeout(() => {
-          products.value = [];
-          getAllBasketProducts();
-          window.location.reload();
-        }, 4000)
+        stopLoading()
+
       } catch (error) {
+        stopLoading()
         console.error("Ошибка при сохранении:", error);
       }
     }
   });
 
 }
+function stopLoading() {
+  setTimeout(() => {
+    loading.value = false
 
+    products.value = [];
+    getAllBasketProducts();
+    window.location.reload();
+
+  }, 10000)
+}
 function decrement(productId) {
   const product = products.value.find((p) => p.product_id === productId);
   if (product) {
@@ -350,6 +371,22 @@ watch(
 </script>
 
 <style scoped>
+.loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 1001;
+  width: 100vw;
+  height: 100vh;
+  background-color: white;
+  opacity: 0.7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .container {
   padding: 10px 10px 100px 10px;
   width: 100%;
