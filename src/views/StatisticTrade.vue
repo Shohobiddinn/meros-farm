@@ -48,6 +48,14 @@ function downloadExcel(item) {
 
 <template>
     <div class="container" style="text-align: center;">
+
+        <div class="search-container">
+            <div style="width: 20px; height: 20px;" @click="$router.go(-1)">
+               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M512 256A256 256 0 1 0 0 256a256 256 0 1 0 512 0zM271 135c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-87 87 87 87c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0L167 273c-9.4-9.4-9.4-24.6 0-33.9L271 135z"/></svg>
+            </div>
+
+
+        </div>
         <div class="search-container" v-if="false">
             <i class="search-icon"><img src="../assets/search.svg" alt=""></i>
             <select class="search-box" v-model="status" @change="getAllOrders">
@@ -74,14 +82,14 @@ function downloadExcel(item) {
                 </div>
                 <div style="display: flex; justify-content: space-between;">
                     <span>Dorilar soni {{ item.number }} ta</span>
-                    <span v-if="item.status == 1">Chiqmagan dorilar soni {{ item.trade.filter((fill) =>
-                        fill.trade_status == false).length }}
+                    <span v-if="item.status == 1">Chiqmagan dorilar soni {{item.trade.filter((fill) =>
+                        fill.trade_status == false).length}}
                         ta</span>
                 </div>
                 <div style="display: flex; justify-content: space-between;">
                     <span>Summa: {{ item.money }} UZS</span>
-                    <span>Summa: {{ item.trade.filter((fill) => fill.trade_status === false).reduce((count, current) =>
-                        count + (current.sold_product.price25 * current.number), 0) }} UZS</span>
+                    <span>Summa: {{item.trade.filter((fill) => fill.trade_status === false).reduce((count, current) =>
+                        count + (current.sold_product.price25 * current.number), 0)}} UZS</span>
 
                 </div>
             </div>

@@ -400,7 +400,7 @@ watch(
 
 .orderFull {
   position: fixed;
-  bottom: 100px;
+  bottom: 110px;
   display: flex;
   justify-content: space-between;
   gap: 20px;
